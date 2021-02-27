@@ -3,7 +3,7 @@
     "username": "root",
     "password": null,
     "database": "test_database",
-    "host": "localhost",
+    "host": "https://media-board.herokuapp.com/",
     "port":"3306",
     "dialect": "mysql"
   },
