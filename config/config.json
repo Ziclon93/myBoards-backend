@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "test_database",
-    "host": "https://media-board.herokuapp.com/",
+    "username": "bd8f62b74dfdc0",
+    "password": "af3f466c",
+    "database": "heroku_eca19492a1952ef",
+    "host": "eu-cdbr-west-03.cleardb.net",
     "port":"3306",
     "dialect": "mysql"
   },
