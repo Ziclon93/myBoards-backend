@@ -2,6 +2,7 @@ const express = require('express');
 var router = express.Router();
 var ctl_user = require('../controllers/user_controller');
 var ctl_board = require('../controllers/board_controller');
+var ctl_tag = require('../controllers/tag_controller');
 
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
@@ -120,7 +121,8 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
             user, 
             req.body['title'], 
             req.body['description'], 
-            req.body['type']
+            req.body['type'],
+            req.body['tags']
             )
             .then(function(success){
                 if(success){
@@ -139,7 +141,7 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
-router.post('/boards', asyncCheckAPIKey, function (req, res, next) {
+router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     ctl_board.getAllBoards().then(boards => {
         if(boards){
             var list= [];

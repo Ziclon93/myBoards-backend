@@ -35,14 +35,14 @@ exports.postTagOfBoard = function(b_id, t_name){
     return new Promise(function(resolve,reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         var success = true;
-            getTag(t_name).then(tag =>{
-                BoardTagModel.create({
-                    tagId : tag.id,
-                    boardId : b_id,
-                }).then(boardTag => {
-                    console.log("Board-Tag created");
-                }); 
-            });
+        getTag(t_name).then(tag =>{
+            BoardTagModel.create({
+                tagId : tag.id,
+                boardId : b_id,
+            }).then(boardTag => {
+                console.log("Board-Tag created");
+            }); 
+        });
         resolve(success);
     });
 }
