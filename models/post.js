@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
+    boardId:{
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     title: {
       type: DataTypes.STRING
     },

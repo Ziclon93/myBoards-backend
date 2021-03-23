@@ -8,6 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      boardId: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      likes:{
+        type: Sequelize.INTEGER
+      },
       title: {
         type: Sequelize.STRING
       },

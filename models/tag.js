@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
+    tagName: {
+      type: DataTypes.STRING
+    }
   }, {
     sequelize,
     modelName: 'tag',

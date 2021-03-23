@@ -1,6 +1,7 @@
 const express = require('express');
 var router = express.Router();
 var ctl_user = require('../controllers/user_controller');
+var ctl_board = require('../controllers/board_controller');
 
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
@@ -72,6 +73,37 @@ router.post('/login', function (req, res, next) {
             console.log("Login Rejected",err);
             res.status(500).send("Internal server error" , err);
         });
+});
+
+
+
+router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
+    ctl_board.getAllBoards().then(boards => {
+        if(boards){
+            var list= [];
+            for (i in boards){
+                var elem = {
+                    id: boards[i].id,
+                    description: threads[i].description,
+                    title: threads[i].title,
+                    likes: threads[i].likes,
+                    type: threads[i].type,
+                    userId: threads[i].userId,
+                    createdAt: threads[i].createdAt,
+                    updatedAt: threads[i].updatedAt,
+                };
+                list.push(elem);
+            };
+            res.json(list);
+        }
+        else{
+            res.json({
+                success: false,
+            })
+        }
+    }, function (err) {
+        res.status(500).send("Internal server error");
+    });
 });
 
 module.exports = router;
