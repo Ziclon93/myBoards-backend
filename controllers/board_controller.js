@@ -24,10 +24,11 @@ exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
 
         var success = true;
         if (user){
-            if(!(b_title.replace(/\s/g, ""))){
+            if(!b_title || /^\s*$/.test(b_title)){
                 resolve(!success);
             }
             else {
+                console.log("_________________________");
                 BoardModel.create({
                     userId : user['id'],
                     title: b_title,
@@ -36,7 +37,6 @@ exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
                 }).then(board => {
                     b_tags.forEach(tagName => {
                         if(!ctl_tag.getTag(tagName)){
-                            console.log("_________________________");
                             ctl_tag.postTag(tagName);
                         }
                         ctl_tag.postTagOfBoard(board.id, tagName)
