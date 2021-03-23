@@ -23,7 +23,7 @@ exports.postBoard = function( user, b_title, b_description, b_type) {
         var success = true;
         if (user){
             //Check if the content or the title of the thread are not empty
-            if(!(t_title.replace(/\s/g, ""))){
+            if(!(b_title.replace(/\s/g, ""))){
                 resolve(!success);
             }
             else {
