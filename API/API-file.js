@@ -84,13 +84,13 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
             for (i in boards){
                 var elem = {
                     id: boards[i].id,
-                    description: threads[i].description,
-                    title: threads[i].title,
-                    likes: threads[i].likes,
-                    type: threads[i].type,
-                    userId: threads[i].userId,
-                    createdAt: threads[i].createdAt,
-                    updatedAt: threads[i].updatedAt,
+                    description: boards[i].description,
+                    title: boards[i].title,
+                    likes: boards[i].likes,
+                    type: boards[i].type,
+                    userId: boards[i].userId,
+                    createdAt: boards[i].createdAt,
+                    updatedAt: boards[i].updatedAt,
                 };
                 list.push(elem);
             };
