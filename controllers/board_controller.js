@@ -2,6 +2,7 @@ var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var boardModel = require('../models/board');
 var DataTypes = require('sequelize/lib/data-types');
+var ctl_tag = require('../controllers/tag_controller');
 
 exports.getAllBoards = function(){
     return new Promise(function(resolve, reject){
@@ -16,26 +17,32 @@ exports.getAllBoards = function(){
     });
 };
 
-exports.postBoard = function( user, b_title, b_description, b_type) {
+exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
 
     return new Promise(function(resolve,reject) {
         const BoardModel = boardModel(sequelize, DataTypes);
+
         var success = true;
         if (user){
-            //Check if the content or the title of the thread are not empty
             if(!(b_title.replace(/\s/g, ""))){
                 resolve(!success);
             }
             else {
-                //With this id, the title and the text we create the model to the database.
                 BoardModel.create({
                     userId : user['id'],
                     title: b_title,
                     description: b_description,
                     type: b_type,
                 }).then(board => {
+                    b_tags.forEach(tagName => {
+                        if(!ctl_tag.getTag(tagName)){
+                            ctl_tag.postTag(tagName);
+                        }
+                        ctl_tag.postTagOfBoard(board.id, tagName)
+                    });
                     console.log("Board created");
                 });
+
                 resolve(success);
             }
         }
