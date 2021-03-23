@@ -35,8 +35,8 @@ exports.postBoard = function( user, b_title, b_description, b_type) {
                     type: b_type,
                 }).then(board => {
                     console.log("Board created");
-                    resolve( board);
                 });
+                resolve(success);
             }
         }
         else{
