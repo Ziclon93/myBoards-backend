@@ -19,7 +19,7 @@ exports.getAllBoards = function(){
 exports.postBoard = function( user, b_title, b_description, b_type) {
 
     return new Promise(function(resolve,reject) {
-        const Board = boardModel(sequelize, DataTypes);
+        const BoardModel = boardModel(sequelize, DataTypes);
         var success = true;
         if (user){
             //Check if the content or the title of the thread are not empty
@@ -28,7 +28,7 @@ exports.postBoard = function( user, b_title, b_description, b_type) {
             }
             else {
                 //With this id, the title and the text we create the model to the database.
-                Board.create({
+                BoardModel.create({
                     userId : user['id'],
                     title: b_title,
                     description: b_description,
