@@ -14,9 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   follow.init({
-    userId: {
+    id: {
       allowNull: false,
       autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
+    userId: {
+      allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER
     },

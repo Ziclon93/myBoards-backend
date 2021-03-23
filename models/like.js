@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class board_tag extends Model {
+  class like extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,14 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  board_tag.init({
+  like.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    tagId: {
+    userId: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER
@@ -29,10 +29,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER
+    },
+    postId:{
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
-    modelName: 'board_tag',
+    modelName: 'like',
   });
-  return board_tag;
+  return like;
 };

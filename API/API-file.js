@@ -106,4 +106,61 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
+/* As headers we have:
+ * api-key : "Api key provided in the profile"
+ * Content-Type : application/x-www-form-urlencoded
+ *
+ * As x-www-form-urlencoded data we have 2 keys:
+ * title
+ * text
+ */
+router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(function(user) {
+        ctl_board.postBoard(user,req.body['title'],req.body['description'],req.body['type'],)
+            .then(function(success){
+                if(success){
+                    res.json({
+                        success: true,
+                    })
+                }else {
+                    res.json({
+                        success: false,
+                    })
+                }
+            }, function (err) {
+                console.log(err);
+                res.status(500).send("Internal server error");
+            });
+    });
+});
+
+router.post('/boards', asyncCheckAPIKey, function (req, res, next) {
+    ctl_board.getAllBoards().then(boards => {
+        if(boards){
+            var list= [];
+            for (i in boards){
+                var elem = {
+                    id: boards[i].id,
+                    description: boards[i].description,
+                    title: boards[i].title,
+                    likes: boards[i].likes,
+                    type: boards[i].type,
+                    userId: boards[i].userId,
+                    createdAt: boards[i].createdAt,
+                    updatedAt: boards[i].updatedAt,
+                };
+                list.push(elem);
+            };
+            res.json(list);
+        }
+        else{
+            res.json({
+                success: false,
+            })
+        }
+    }, function (err) {
+        res.status(500).send("Internal server error");
+    });
+});
+
 module.exports = router;

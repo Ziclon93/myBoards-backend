@@ -13,9 +13,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      likes:{
-        type: Sequelize.INTEGER
-      },
       title: {
         type: Sequelize.STRING
       },
