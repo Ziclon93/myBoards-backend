@@ -7,7 +7,7 @@ exports.getAllBoards = function(){
     return new Promise(function(resolve, reject){
         var BoardModel = boardModel(sequelize, DataTypes);
 
-        BoardModel.findAll({order:[['likes', 'ASC']]})
+        BoardModel.findAll({order:[['createdAt', 'ASC']]})
          .then(function(data){
            resolve(data);
          }, function(err){
