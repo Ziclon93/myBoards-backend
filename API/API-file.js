@@ -116,7 +116,12 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
  */
 router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(function(user) {
-        ctl_board.postBoard(user,req.body['title'],req.body['description'],req.body['type'],)
+        ctl_board.postBoard( 
+            user, 
+            req.body['title'], 
+            req.body['description'], 
+            req.body['type']
+            )
             .then(function(success){
                 if(success){
                     res.json({
