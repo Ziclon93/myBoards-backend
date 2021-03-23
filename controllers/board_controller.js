@@ -16,7 +16,7 @@ exports.getAllBoards = function(){
     });
 };
 
-exports.getBoards = function(logged_username, community){
+exports.getBoards = function(){
     return new Promise(function(resolve, reject){
         var BoardModel = boardModel(sequelize, DataTypes);
 
