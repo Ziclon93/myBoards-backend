@@ -4,13 +4,13 @@ var tagModel = require('../models/tag');
 var boardTagModel = require('../models/board_tag');
 var DataTypes = require('sequelize/lib/data-types');
 
-exports.getTagByName = function(t_name){
+exports.getTag = function(t_name){
     return new Promise(function(resolve, reject){
-        var tag = getTag(t_name);
+        var tag = findOrCreateTag(t_name);
         if(tag){
             resolve(tag);
         }else{
-            reject();
+            reject(err);
         }
     });
 };
@@ -30,23 +30,24 @@ exports.postTag = function(t_name){
 };
 
 exports.postTagOfBoard = function(b_id, t_name){
+    
     return new Promise(function(resolve,reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         var success = true;
-        var tag = getTag(t_name)
-        BoardTagModel.create({
-            tagId : tag.id,
-            boardId : b_id,
-        }); 
+        findOrCreateTag(t_name).then(tag =>{
+            BoardTagModel.create({
+                tagId : tag.id,
+                boardId : b_id,
+            }).then(boardTag => {
+                console.log("Board-Tag created");
+            }); 
+        });
         resolve(success);
     });
 }
 
-getTag =  function(t_name){
+findOrCreateTag = function(t_name){
     var TagModel = tagModel(sequelize, DataTypes);
-    TagModel.findOne({ where : { tagName: t_name} })
-     .then(function(data){
-       return data;
-     });
-    return null;
+    var tag = TagModel.findOrCreate({ where : { tagName: t_name} })
+    return tag;    
 }

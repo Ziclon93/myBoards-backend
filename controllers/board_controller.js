@@ -28,7 +28,6 @@ exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
                 resolve(!success);
             }
             else {
-                console.log("_________________________");
                 BoardModel.create({
                     userId : user['id'],
                     title: b_title,
