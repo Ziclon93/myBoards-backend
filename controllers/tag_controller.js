@@ -42,6 +42,10 @@ exports.postTagOfBoard = function(b_id, t_name){
 
 findOrCreateTag = function(t_name){
     var TagModel = tagModel(sequelize, DataTypes);
-    var tag = await TagModel.findOrCreate({ where : { tagName: t_name} })
-    return tag;    
+    TagModel.findOrCreate({ where : { tagName: t_name} }).then(tag => {
+        return tag;
+    }, function (err) {
+        console.log("Error ocurred: " + err);
+        return null;
+    });
 }
