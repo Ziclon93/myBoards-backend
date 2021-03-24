@@ -6,8 +6,12 @@ var DataTypes = require('sequelize/lib/data-types');
 
 exports.getTag = function(t_name){
     return new Promise(function(resolve, reject){
-        var tag = findOrCreateTag(t_name);
-        resolve(tag);
+        findOrCreateTag(t_name).then(tag => {
+            resolve(tag);
+        }, function (err) {
+            console.log("Error ocurred: " + err);
+            reject(err);
+        });
     });
 };
 
@@ -20,6 +24,9 @@ exports.postTag = function(t_name){
             tagName : t_name
         }).then(tag => {
             console.log("Board created");
+        }, function (err) {
+            console.log("Error ocurred: " + err);
+            reject(err);
         });
         resolve(success);
     });
@@ -36,6 +43,9 @@ exports.postTagOfBoard = function(b_id, t_name){
                 boardId : b_id,
             }).then(boardTag => {
                 console.log("Board-Tag created");
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
             }); 
         });
         resolve(success);

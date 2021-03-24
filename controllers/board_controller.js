@@ -11,15 +11,16 @@ exports.getAllBoards = function(){
         BoardModel.findAll({order:[['createdAt', 'DESC']]})
          .then(function(data){
            resolve(data);
-         }, function(err){
-           reject(err);
-         });
+         }, function (err) {
+            console.log("Error ocurred: " + err);
+            reject(err);
+        });
     });
 };
 
 exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
 
-    return new Promise(function(resolve,reject) {
+    return new Promise(function(resolve, reject) {
         const BoardModel = boardModel(sequelize, DataTypes);
 
         var success = true;
@@ -39,13 +40,13 @@ exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
                         ctl_tag.postTagOfBoard(board.id, tagName)
                     });
                     console.log("Board created");
+                }, function (err) {
+                    console.log("Error ocurred: " + err);
+                    reject(err);
                 });
 
                 resolve(success);
             }
-        }
-        else{
-            resolve(!success);
         }
     });
 };
