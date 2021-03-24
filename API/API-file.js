@@ -171,17 +171,21 @@ router.post('/boards/follower', asyncCheckAPIKey, function (req, res, next) {
 });
 
 router.post('/follow', asyncCheckAPIKey, function (req, res, next) {
-    var user = await ctl_user.getUserByAPIKey(req.headers['api-key'] );
-    ctl_follow.postFollow(user, req.body['followed_name']).then(success => {
-        if(success){
-            res.json({
-                success: true,
-            })
-        }else{
-            res.json({
-                success: false,
-            })
-        }
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+        ctl_follow.postFollow(user, req.body['followed_name']).then(success => {
+            if(success){
+                res.json({
+                    success: true,
+                })
+            }else{
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log("Follow Rejected",err);
+            res.status(500).send("Internal server error");
+        });
     }, function (err) {
         console.log("Follow Rejected",err);
         res.status(500).send("Internal server error");
@@ -189,27 +193,32 @@ router.post('/follow', asyncCheckAPIKey, function (req, res, next) {
 });
 
 router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
-    var user = await ctl_user.getUserByAPIKey(req.headers['api-key'] );
-    ctl_post.postPost(
-        user,
-        req.body['board_id'], 
-        req.body['post_title'], 
-        req.body['post_description'], 
-        req.body['post_url']
-    ).then(success => {
-        if(success){
-            res.json({
-                success: true,
-            })
-        }else{
-            res.json({
-                success: false,
-            })
-        }
-    }, function (err) {
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+        ctl_post.postPost(
+            user,
+            req.body['board_id'], 
+            req.body['post_title'], 
+            req.body['post_description'], 
+            req.body['post_url']
+        ).then(success => {
+            if(success){
+                res.json({
+                    success: true,
+                })
+            }else{
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log("Follow Rejected",err);
+            res.status(500).send("Internal server error");
+        });
+     }, function (err) {
         console.log("Follow Rejected",err);
         res.status(500).send("Internal server error");
     });
+   
 });
 
 
