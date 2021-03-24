@@ -37,10 +37,10 @@ function existingFollow(u_id, f_id) {
     FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
         .then(function(user){
             if(user) {
-                return false;
+                return true;
             }
             else {
-                return true;
+                return false;
             }
         },function(err){
             console.log("Error ocurred: " + err);
