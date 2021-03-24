@@ -2,7 +2,7 @@ var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var followModel = require('../models/follow');
 var DataTypes = require('sequelize/lib/data-types');
-var ctl_user = require('../controllers/user_controller');
+var ctl_user = require('./user_controller');
 
 exports.postFollow = function(user, f_name){
     
@@ -10,15 +10,15 @@ exports.postFollow = function(user, f_name){
         var FollowModel = followModel(sequelize, DataTypes);
 
         var success = true;
-        var followerId = user['id'];
-        var followedId = ctl_user.getUserByUsername(f_name)['id'];
+        var u_id = user['id'];
+        var f_id = ctl_user.getUserByUsername(f_name)['id'];
 
-        if(existingFollow(followerId, followedId)){
+        if(existingFollow(u_id, f_id)){
             resolve(!success);
         }else{
             FollowModel.create({
-                followerId: followerId,
-                followedId: followedId
+                followerId: u_id,
+                followedId: f_id
             }).then(follow => {
                 console.log("Follow created");
             }, function (err) {
@@ -30,9 +30,9 @@ exports.postFollow = function(user, f_name){
     });
 }
 
-function existingFollow(followerId, followedId) {
+function existingFollow(u_id, f_id) {
     var FollowModel = followModel(sequelize, DataTypes);
-    FollowModel.findOne({ where : { followerId: followerId, followedId: followedId } })
+    FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
         .then(function(user){
             if(user) {
                 return false;
