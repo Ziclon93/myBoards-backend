@@ -134,11 +134,12 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
                         success: false,
                     })
                 }
-            }, function (err) {
-                console.log(err);
-                res.status(500).send("Internal server error");
+            }).catch((err) =>{
+                console.log("Login Rejected",err);
+                res.status(500).send("Internal server error" , err);
             });
     });
 });
+
 
 module.exports = router;
