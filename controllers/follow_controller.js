@@ -11,14 +11,14 @@ exports.postFollow = function(user, f_name){
 
         var success = true;
         var u_id = user['id'];
-        ctl_user.getUserByUsername(f_name).then( f_id =>{
-            existingFollow(u_id, f_id).then(result =>{
+        ctl_user.getUserByUsername(f_name).then( followed =>{
+            existingFollow(u_id, followed['id']).then(result =>{
                 if(result){
                     resolve(!success)
                 }else{
                     FollowModel.create({
                         followerId: u_id,
-                        followedId: f_id
+                        followedId: followed['id']
                     }).then(follow => {
                         console.log("Follow created");
                     }, function (err) {
