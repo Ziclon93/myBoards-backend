@@ -43,9 +43,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    size: {
-      type: DataTypes.INTEGER
-    },
     rotation: {
       type: DataTypes.INTEGER
     },

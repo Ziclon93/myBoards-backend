@@ -26,7 +26,6 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                                 username: u_name,
                                 password: hash,
                                 apiKey: apikey,
-                                privacity : 0,
                             }).then(user => {
                                 console.log("User created and added to sitexml");
                             });
@@ -87,6 +86,27 @@ exports.getUserByUsername = function (u_username) {
         UserModel.findOne({where: {username: u_username}})
             .then(function (user) {
                 resolve(user);
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
+            })
+    });
+};
+
+exports.getUserSearchByName = function (u_username) {
+
+    return new Promise(function (resolve, reject) {
+        var UserModel = userModel(sequelize, DataTypes);
+
+        UserModel.findAll({
+                limit: 10,
+                where: Sequelize.literal('MATCH username AGAINST (:name)'),
+                replacements: {
+                name: u_username
+                }
+            })
+            .then(function (userList) {
+                resolve(userList);
             }, function (err) {
                 console.log("Error ocurred: " + err);
                 reject(err);

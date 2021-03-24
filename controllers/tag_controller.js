@@ -21,11 +21,6 @@ exports.postTagOfBoard = function(b_id, tag){
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         var success = true;
         
-        console.log("__________________");
-        console.log("tag.id" + tag.id);
-        console.log("tag" + tag);
-        console.log("tag[id]" + tag['id']);
-        console.log("__________________");
         BoardTagModel.create({
             tagId : tag.id,
             boardId : b_id,
