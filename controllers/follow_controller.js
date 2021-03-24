@@ -41,6 +41,6 @@ function existingFollow(u_id, f_id) {
                 return true;
             }
         },function(err){
-            reject("Mysql error, check your query"+err);
+            console.log("Error ocurred: " + err);
         });
   }
