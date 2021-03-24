@@ -35,9 +35,7 @@ exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
                     type: b_type,
                 }).then(board => {
                     b_tags.forEach(tagName => {
-                        if(!ctl_tag.getTag(tagName)){
-                            ctl_tag.postTag(tagName);
-                        }
+                        ctl_tag.getTag(tagName);
                         ctl_tag.postTagOfBoard(board.id, tagName)
                     });
                     console.log("Board created");
