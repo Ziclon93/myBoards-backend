@@ -20,12 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    userId: {
+    followerId: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    followed: {
+    followedId: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER

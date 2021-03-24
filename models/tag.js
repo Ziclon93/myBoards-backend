@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     tagName: {
       type: DataTypes.STRING
+    },
+    updatedAt: {
+      type: DataTypes.DATE
     }
   }, {
     sequelize,

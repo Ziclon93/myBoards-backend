@@ -51,7 +51,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     resourceUrl: {
       type: DataTypes.STRING
-    }
+    },
+    updatedAt: {
+      type: DataTypes.DATE
+    },
   }, {
     sequelize,
     modelName: 'post',
