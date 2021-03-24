@@ -11,22 +11,24 @@ exports.postFollow = function(user, f_name){
 
         var success = true;
         var u_id = user['id'];
-        var f_id = ctl_user.getUserByUsername(f_name)['id'];
+        ctl_user.getUserByUsername(f_name).then( user =>{
+            if(existingFollow(user['id'], f_id)){
+                resolve(!success);
+            }else{
+                FollowModel.create({
+                    followerId: user['id'],
+                    followedId: f_id
+                }).then(follow => {
+                    console.log("Follow created");
+                }, function (err) {
+                    console.log("Error ocurred: " + err);
+                    reject(err);
+                }); 
+                resolve(success);
+            }
+        })
 
-        if(existingFollow(u_id, f_id)){
-            resolve(!success);
-        }else{
-            FollowModel.create({
-                followerId: u_id,
-                followedId: f_id
-            }).then(follow => {
-                console.log("Follow created");
-            }, function (err) {
-                console.log("Error ocurred: " + err);
-                reject(err);
-            }); 
-            resolve(success);
-        }
+      
     });
 }
 
