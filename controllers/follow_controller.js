@@ -33,11 +33,7 @@ exports.postFollow = function(user, f_name){
     });
 }
 
-async function existingFollow(u_id, f_id) {
-    
-  }
-
-  async function existingFollow(u_id, f_id){
+async function existingFollow(u_id, f_id){
     try{
         var FollowModel = followModel(sequelize, DataTypes);
         FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
