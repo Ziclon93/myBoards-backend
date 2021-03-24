@@ -6,11 +6,11 @@ var DataTypes = require('sequelize/lib/data-types');
 
 exports.getTag = function(t_name){
     return new Promise(function(resolve, reject){
-        findOrCreateTag(t_name).then(tag => {
-            resolve(tag);
-        }, function (err) {
-            console.log("Error ocurred: " + err);
-            reject(err);
+        
+        var TagModel = tagModel(sequelize, DataTypes);
+        TagModel.findOrCreate({ where : { tagName: t_name} })
+        .spread(function(tagResult, created){
+            resolve(tagResult);
         });
     });
 };
@@ -36,13 +36,5 @@ exports.postTagOfBoard = function(b_id, tag){
             reject(err);
         }); 
         resolve(success);
-    });
-}
-
-findOrCreateTag = function(t_name){
-    var TagModel = tagModel(sequelize, DataTypes);
-    TagModel.findOrCreate({ where : { tagName: t_name} })
-    .spread(function(tagResult, created){
-        return tagResult
     });
 }
