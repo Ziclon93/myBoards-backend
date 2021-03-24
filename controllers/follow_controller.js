@@ -35,8 +35,8 @@ exports.postFollow = function(user, f_name){
 function existingFollow(u_id, f_id) {
     var FollowModel = followModel(sequelize, DataTypes);
     FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
-        .then(function(user){
-            if(user) {
+        .then( result =>{
+            if(result) {
                 return true;
             }
             else {
