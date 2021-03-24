@@ -7,11 +7,7 @@ var DataTypes = require('sequelize/lib/data-types');
 exports.getTag = function(t_name){
     return new Promise(function(resolve, reject){
         var tag = findOrCreateTag(t_name);
-        if(tag){
-            resolve(tag);
-        }else{
-            reject(err);
-        }
+        resolve(tag);
     });
 };
 
