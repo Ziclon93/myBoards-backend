@@ -91,7 +91,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                     type: boards[i].type,
                     userId: boards[i].userId,
                     createdAt: boards[i].createdAt,
-                    updatedAt: boards[i].updatedAt,
+                    updatedAt: boards[i].updatedAt
                 };
                 list.push(elem);
             };
