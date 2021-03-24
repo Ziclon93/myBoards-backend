@@ -34,9 +34,9 @@ exports.postFollow = function(user, f_name){
 
 function existingFollow(u_id, f_id) {
     var FollowModel = followModel(sequelize, DataTypes);
-    FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
+    FollowModel.count({ where : { followerId: u_id, followedId: f_id } })
         .then( result =>{
-            if(result) {
+            if(result >= 0) {
                 return true;
             }
             else {
