@@ -23,6 +23,7 @@ exports.postTagOfBoard = function(b_id, t_name){
         findOrCreateTag(t_name).then(tag =>{
             console.log("__________________");
             console.log("tag.id" + tag.id);
+            console.log("tag" + tag);
             console.log("tag[id]" + tag['id']);
             console.log("__________________");
             BoardTagModel.create({
