@@ -42,10 +42,13 @@ exports.postTagOfBoard = function(b_id, t_name){
 
 findOrCreateTag = function(t_name){
     var TagModel = tagModel(sequelize, DataTypes);
-    TagModel.findOrCreate({ where : { tagName: t_name} }).then(tag => {
-        return tag;
-    }, function (err) {
-        console.log("Error ocurred: " + err);
-        return null;
+    TagModel.findOrCreate({ where : { tagName: t_name} })
+    .spread(function(tagResult, created){
+        if (created) {
+            return tagResult
+        }else{
+            console.log("Tag not created")
+            return null
+        }
     });
 }
