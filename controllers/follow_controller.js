@@ -37,7 +37,6 @@ const existingFollow = (u_id, f_id) => {
     return FollowModel.findOne({
         where: { followerId: u_id, followedId: f_id }
     }).then(response => {
-        console.log(response.dataValues);
         return response;
     });
 };
