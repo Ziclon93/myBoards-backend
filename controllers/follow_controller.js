@@ -12,8 +12,7 @@ exports.postFollow = function(user, f_name){
         var success = true;
         var u_id = user['id'];
         ctl_user.getUserByUsername(f_name).then( f_id =>{
-            var followerExist = await existingFollow(u_id, f_id);
-            if(followerExist){
+            if(existingFollow(u_id, f_id)){
                 resolve(!success);
             }else{
                 FollowModel.create({
@@ -33,22 +32,12 @@ exports.postFollow = function(user, f_name){
     });
 }
 
-async function existingFollow(u_id, f_id){
-    try{
-        var FollowModel = followModel(sequelize, DataTypes);
-        FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
-            .then( result =>{
-                if(result) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            },function(err){
-                console.log("Error ocurred: " + err);
-            });
-    }
-    catch(err) {
-        res.send("La API key no es valida");
-    }
-}
+const existingFollow = (u_id, f_id) => {
+    var FollowModel = followModel(sequelize, DataTypes);
+    return FollowModel.findOne({
+        where: { followerId: u_id, followedId: f_id }
+    }).then(response => {
+        console.log(response.dataValues);
+        return response;
+    });
+};
