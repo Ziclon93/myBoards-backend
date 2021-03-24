@@ -37,6 +37,10 @@ module.exports = {
       rotation: {
         type: Sequelize.INTEGER
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
       resourceUrl: {
         type: Sequelize.STRING
       }
