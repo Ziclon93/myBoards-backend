@@ -15,23 +15,6 @@ exports.getTag = function(t_name){
     });
 };
 
-exports.postTag = function(t_name){
-    
-    return new Promise(function(resolve,reject) {
-        var TagModel = tagModel(sequelize, DataTypes);
-        var success = true;
-        TagModel.create({
-            tagName : t_name
-        }).then(tag => {
-            console.log("Board created");
-        }, function (err) {
-            console.log("Error ocurred: " + err);
-            reject(err);
-        });
-        resolve(success);
-    });
-};
-
 exports.postTagOfBoard = function(b_id, t_name){
     
     return new Promise(function(resolve,reject) {
