@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      type: DataTypes.DATE
     }
   }, {
     sequelize,

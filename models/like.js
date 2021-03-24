@@ -32,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     postId:{
       type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      type: DataTypes.DATE
     }
   }, {
     sequelize,
