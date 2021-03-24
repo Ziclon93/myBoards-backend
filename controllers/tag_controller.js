@@ -44,11 +44,6 @@ findOrCreateTag = function(t_name){
     var TagModel = tagModel(sequelize, DataTypes);
     TagModel.findOrCreate({ where : { tagName: t_name} })
     .spread(function(tagResult, created){
-        if (created) {
-            return tagResult
-        }else{
-            console.log("Tag not created")
-            return null
-        }
+        return tagResult
     });
 }
