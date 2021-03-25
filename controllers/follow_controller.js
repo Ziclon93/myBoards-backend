@@ -16,6 +16,7 @@ exports.postFollow = function(user, f_name){
                 if(result){
                     resolve(!success)
                 }else{
+                    console.log("_______________")
                     FollowModel.create({
                         followerId: u_id,
                         followedId: followed['id']
@@ -25,6 +26,7 @@ exports.postFollow = function(user, f_name){
                         console.log("Error ocurred: " + err);
                         reject(err);
                     }); 
+                    console.log("_______________")
                     resolve(success);
                 }
             })
