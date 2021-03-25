@@ -13,6 +13,7 @@ exports.postFollow = function(user, f_name){
         var u_id = user['id'];
         ctl_user.getUserByUsername(f_name).then( followed =>{
             existingFollow(u_id, followed['id']).then(result =>{
+                console.log("_______________22")
                 if(result){
                     console.log("_______________2")
                     resolve(!success)
@@ -39,8 +40,7 @@ function existingFollow(u_id, f_id) {
     var FollowModel = followModel(sequelize, DataTypes);
     FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
         .then( result =>{
-            console.log("_______________1")
-            if(result) {
+            if(result != null) {
                 return true;
             }
             else {
