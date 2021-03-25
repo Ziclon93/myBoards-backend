@@ -11,44 +11,27 @@ exports.postFollow = function(user, f_name){
 
         var success = true;
         var u_id = user['id'];
-        ctl_user.getUserByUsername(f_name).then( followed =>{
-            existingFollow(u_id, followed['id']).then(result =>{
-                console.log("_______________22")
-                if(result){
-                    console.log("_______________2")
-                    resolve(!success)
-                }else{
-                    console.log("_______________")
-                    FollowModel.create({
-                        followerId: u_id,
-                        followedId: followed['id']
-                    }).then(follow => {
-                        console.log("Follow created");
-                    }, function (err) {
-                        console.log("Error ocurred: " + err);
-                        reject(err);
-                    }); 
-                    console.log("_______________")
-                    resolve(success);
-                }
-            })
-        })
+        let f_exist = FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
+
+        console.log("_______________22")
+        if(f_exist){
+            console.log("_______________2")
+            resolve(!success)
+        }else{
+            console.log("_______________")
+            FollowModel.create({
+                followerId: u_id,
+                followedId: followed['id']
+            }).then(follow => {
+                console.log("Follow created");
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
+            }); 
+            console.log("_______________")
+            resolve(success);
+        }
     });
 }
-
-function existingFollow(u_id, f_id) {
-    var FollowModel = followModel(sequelize, DataTypes);
-    FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
-        .then( result =>{
-            if(result != null) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        },function(err){
-            console.log("Error ocurred: " + err);
-        });
-  }
 
   
