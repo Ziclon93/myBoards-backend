@@ -39,6 +39,7 @@ function existingFollow(u_id, f_id) {
     var FollowModel = followModel(sequelize, DataTypes);
     FollowModel.findOne({ where : { followerId: u_id, followedId: f_id } })
         .then( result =>{
+            console.log("_______________1")
             if(result) {
                 return true;
             }
