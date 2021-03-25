@@ -14,6 +14,7 @@ exports.postFollow = function(user, f_name){
         ctl_user.getUserByUsername(f_name).then( followed =>{
             existingFollow(u_id, followed['id']).then(result =>{
                 if(result){
+                    console.log("_______________2")
                     resolve(!success)
                 }else{
                     console.log("_______________")
