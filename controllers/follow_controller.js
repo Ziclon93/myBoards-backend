@@ -13,12 +13,9 @@ exports.postFollow = function(user, f_name){
         var u_id = user['id'];
         ctl_user.getUserByUsername(f_name).then( followed =>{
             existingFollow(u_id, followed['id']).then(function(result) {
-                console.log("_______________22")
                 if(result){
-                    console.log("_______________2")
                     resolve(!success)
                 }else{
-                    console.log("_______________")
                     FollowModel.create({
                         followerId: u_id,
                         followedId: followed['id']
@@ -28,7 +25,6 @@ exports.postFollow = function(user, f_name){
                         console.log("Error ocurred: " + err);
                         reject(err);
                     }); 
-                    console.log("_______________")
                     resolve(success);
                 }
             })
