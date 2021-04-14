@@ -5,7 +5,7 @@ var DataTypes = require('sequelize/lib/data-types');
 const bcrypt = require('bcrypt');
 var hat = require('hat');
 
-exports.userController_Signup = function (u_email, u_name, u_pass) {
+exports.signUp = function (u_email, u_name, u_pass) {
 
     return new Promise(function(resolve,reject){
         const saltRounds = 10;
@@ -26,6 +26,7 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                                 username: u_name,
                                 password: hash,
                                 apiKey: apikey,
+                                category: 1
                             }).then(user => {
                                 console.log("User created and added to sitexml");
                             });
@@ -33,6 +34,29 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                     });
 
                     resolve(true);
+                }
+            },function(err){
+                reject("Mysql error, check your query"+err);
+            });
+    });
+};
+
+exports.setCategory = function (u_id, u_category) {
+
+    return new Promise(function(resolve,reject){
+
+        var UserModel = userModel(sequelize, DataTypes);
+
+        UserModel.findOne({ where : { id: u_id} })
+            .then(function(user){
+                if(user) {
+                    user.update({
+                        category: u_category
+                    });
+                    resolve(true);
+                }
+                else {
+                    resolve(false);
                 }
             },function(err){
                 reject("Mysql error, check your query"+err);

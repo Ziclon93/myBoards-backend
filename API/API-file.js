@@ -31,7 +31,7 @@ async function asyncCheckAPIKey(req,res,next){
  * Return: True (if signed up) False (user already signed up)
  */
 router.post('/signup', function (req, res, next) {
-    ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password'])
+    ctl_user.signUp(req.body['email'], req.body['username'], req.body['password'])
         .then(function(success){
             if(success){
                 res.json({
@@ -221,5 +221,26 @@ router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
    
 });
 
+router.post('/users/category', asyncCheckAPIKey, function (req, res, next) {
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+        ctl_user.setCategory(req.body['user_id'], req.body['category']).then(success => {
+            if(success){
+                res.json({
+                    success: true,
+                })
+            }else{
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log("Category edit Rejected",err);
+            res.status(500).send("Internal server error");
+        });
+    }, function (err) {
+        console.log("Category edit Rejected",err);
+        res.status(500).send("Internal server error");
+    });
+});
 
 module.exports = router;
