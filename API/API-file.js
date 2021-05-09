@@ -73,7 +73,8 @@ router.post('/login', function (req, res, next) {
             }
         }).catch((err) =>{
             console.log("Login Rejected",err);
-            res.status(500).send("Internal server error" , err);
+            res.statusCode = 500;
+            res.end("User not valid");
         });
 });
 
