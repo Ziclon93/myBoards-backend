@@ -72,6 +72,7 @@ exports.userController_Login = function (u_name, u_pass) {
 
         UserModel.findOne({where: {username: u_name}})
             .then((user) => {
+                if(!user) throw err;
                 bcrypt.compare(u_pass, user.password).then(
                     (result) => {
                         if(result){
