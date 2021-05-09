@@ -80,9 +80,10 @@ exports.userController_Login = function (u_name, u_pass) {
                             resolve(null);
                         }
                     });
-            }, function (err) {
+            }).catch(function(err){
                 console.log("Error ocurred: " + err);
                 reject(err);
+
             });
     });
 };
