@@ -4,6 +4,7 @@ var ctl_user = require('../controllers/user_controller');
 var ctl_board = require('../controllers/board_controller');
 var ctl_follow = require('../controllers/follow_controller');
 var ctl_post = require('../controllers/post_controller');
+const e = require('express');
 
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
@@ -38,14 +39,13 @@ router.post('/signup', function (req, res, next) {
                     success: true,
                 })
             }else {
-                res.json({
-                    success: false,
-                })
+                throw error;
             }
-        }, function (err) {
-            console.log(err);
-            res.status(500).send("Internal server error");
-        });
+        }).catch((err) =>{
+            console.log("Login Rejected",err);
+            res.statusCode = 500;
+            res.end("The user is already registered");
+        });;
 });
 
 /* Content-Type : application/x-www-form-urlencoded
