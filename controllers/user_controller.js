@@ -11,7 +11,7 @@ exports.signUp = function (u_email, u_name, u_pass) {
         const saltRounds = 10;
         var UserModel = userModel(sequelize, DataTypes);
 
-        if(u_name.isEmpty() || u_email.isEmpty() || u_pass.isEmpty() ){
+        if(u_name=="" || u_email=="" || u_pass=="" ){
             reject("The values are empty")
         }
         UserModel.findOne({ where : { username: u_name, email:u_email } })
