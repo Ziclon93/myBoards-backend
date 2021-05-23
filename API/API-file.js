@@ -4,6 +4,7 @@ var ctl_user = require('../controllers/user_controller');
 var ctl_board = require('../controllers/board_controller');
 var ctl_follow = require('../controllers/follow_controller');
 var ctl_post = require('../controllers/post_controller');
+var ctl_valoration = require('../controllers/valoration_controller');
 const e = require('express');
 
 //Middleware to check API key
@@ -238,6 +239,24 @@ router.post('/users/category', asyncCheckAPIKey, function (req, res, next) {
             console.log("Category edit Rejected",err);
             res.status(500).send("Internal server error");
         });
+    }, function (err) {
+        console.log("Category edit Rejected",err);
+        res.status(500).send("Internal server error");
+    });
+});
+
+router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+        ctl_valoration.getUserValoration(user).then(valoration =>{
+            res.json({
+                username: user.username,
+                iconUrl: user.iconUrl,
+                valoration: valoration,
+            })
+        }, function (err) {
+            console.log("Category edit Rejected",err);
+            res.status(500).send("Internal server error");
+        })
     }, function (err) {
         console.log("Category edit Rejected",err);
         res.status(500).send("Internal server error");

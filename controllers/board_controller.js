@@ -19,6 +19,20 @@ exports.getAllBoards = function(){
     });
 };
 
+exports.getUserBoards = function(user){
+    return new Promise(function(resolve, reject){
+        var BoardModel = boardModel(sequelize, DataTypes);
+
+        BoardModel.findAll({where:{userId: user.userId}})
+         .then(function(data){
+           resolve(data);
+         }, function (err) {
+            console.log("Error ocurred: " + err);
+            reject(err);
+        });
+    });
+};
+
 exports.getFollowerBoards = function(f_name){
     return new Promise(function(resolve, reject){
         var BoardModel = boardModel(sequelize, DataTypes);

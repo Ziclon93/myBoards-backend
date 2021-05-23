@@ -28,6 +28,19 @@ exports.postPost = function(user, b_id, p_title, p_description, p_url){
         resolve(success);
     });
 }
+exports.getUserPosts = function(user){
+    return new Promise(function(resolve, reject){
+        var PostModel = postModel(sequelize, DataTypes);
+
+        PostModel.findAll({where:{userId: user.userId}})
+         .then(function(data){
+           resolve(data);
+         }, function (err) {
+            console.log("Error ocurred: " + err);
+            reject(err);
+        });
+    });
+};
 
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);

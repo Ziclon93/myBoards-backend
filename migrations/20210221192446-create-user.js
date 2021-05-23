@@ -25,6 +25,9 @@ module.exports = {
       apiKey: {
         type: Sequelize.STRING
       },
+      iconUrl: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -22,15 +22,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       allowNull: false,
-      primaryKey: true,
-      type: DataTypes.INTEGER
-    },
-    boardId: {
-      allowNull: false,
-      primaryKey: true,
       type: DataTypes.INTEGER
     },
     postId:{
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    boardId:{
+      allowNull: false,
       type: DataTypes.INTEGER
     },
     updatedAt: {
