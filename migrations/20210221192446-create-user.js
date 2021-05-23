@@ -26,6 +26,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       iconUrl: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {

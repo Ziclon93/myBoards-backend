@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     iconUrl: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     updatedAt: {

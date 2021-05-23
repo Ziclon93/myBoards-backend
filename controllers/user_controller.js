@@ -30,6 +30,7 @@ exports.signUp = function (u_email, u_name, u_pass) {
                                 password: hash,
                                 apiKey: apikey,
                                 category: 1,
+                                iconUrl: "",
                             }).then(user => {
                                 console.log("User created and added to sitexml");
                             });
