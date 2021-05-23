@@ -32,5 +32,7 @@ exports.getUserValoration = function(user){
         }
 
         resolve((postsValoration + boardsValoration) /2);
+    },function(err){
+        reject("Mysql error, check your query"+err);
     });
 }
