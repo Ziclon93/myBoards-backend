@@ -32,7 +32,7 @@ exports.getUserPosts = function(user){
     return new Promise(function(resolve, reject){
         var PostModel = postModel(sequelize, DataTypes);
 
-        PostModel.findAll({where:{userId: user.userId}})
+        PostModel.findAll({where:{userId: user.id}})
          .then(function(data){
            resolve(data);
          }, function (err) {

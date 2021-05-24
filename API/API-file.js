@@ -254,11 +254,11 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
                 valoration: valoration,
             })
         }, function (err) {
-            console.log("Category edit Rejected",err);
+            console.log("Get profile Rejected",err);
             res.status(500).send("Internal server error");
         })
     }, function (err) {
-        console.log("Category edit Rejected",err);
+        console.log("Get profile Rejected",err);
         res.status(500).send("Internal server error");
     });
 });
