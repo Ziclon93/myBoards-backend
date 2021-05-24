@@ -15,24 +15,33 @@ exports.getUserValoration = function(user){
         var userPosts = ctl_post.getUserPosts(user);
         var postsValoration = 0;
         for(var post in userPosts){
-            var postLikes = LikeModel.count({where:{postId: post.id}});
-            var postDislikes = DislikeModel.count({where:{postId: post.id}});
-            
-            postsValoration += (postLikes - postDislikes)/100;
+            LikeModel.count({where:{postId: post.id}}).then(function(postLikes){
+                DislikeModel.count({where:{postId: post.id}}).then(function(postDislikes){
+                    postsValoration += (postLikes - postDislikes)/100;
+                },function(err){
+                    reject("Mysql error, check your query"+err);
+                })
+            },function(err){
+                reject("Mysql error, check your query"+err);
+            });
         }
 
         var userBoards = ctl_board.getUserBoards(user);
 
         var boardsValoration = 0;
         for(var board in userBoards){
-            var boardLikes = LikeModel.count({where:{boardId: board.id}});
-            var boardDislikes = DislikeModel.count({where:{boardId: board.id}});
+            LikeModel.count({where:{boardId: board.id}}).then(function(boardLikes){
+                DislikeModel.count({where:{boardId: board.id}}).then(function(boardDislikes){
+                    boardsValoration += (boardLikes - boardDislikes)/100;
+                },function(err){
+                    reject("Mysql error, check your query"+err);
+                })
+            },function(err){
+                reject("Mysql error, check your query"+err);
+            });
             
-            boardsValoration += (boardLikes - boardDislikes)/100;
         }
 
         resolve((postsValoration + boardsValoration) /2);
-    },function(err){
-        reject("Mysql error, check your query"+err);
     });
 }
