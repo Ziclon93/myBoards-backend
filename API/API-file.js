@@ -223,7 +223,7 @@ router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
    
 });
 
-router.post('/users/iconUrl', asyncCheckAPIKey, function (req, res, next) {
+router.post('/profile/iconUrl', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_user.setIconUrl(user.id, req.body['iconUrl']).then(new_iconUrl => {
             res.json({
