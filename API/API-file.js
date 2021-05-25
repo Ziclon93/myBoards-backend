@@ -223,6 +223,24 @@ router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
    
 });
 
+router.post('/users/iconUrl', asyncCheckAPIKey, function (req, res, next) {
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+        ctl_user.setIconUrl(user.id, req.body['iconUrl']).then(new_iconUrl => {
+            res.json({
+                iconUrl: new_iconUrl,
+            })
+        }, function (err) {
+            console.log("iconUrl update rejected",err);
+            res.statusCode = 500;
+            res.end("iconUrl update rejected");
+        });
+    }, function (err) {
+        console.log("iconUrl update rejected",err);
+        res.statusCode = 500;
+        res.end("iconUrl update rejected");
+    });
+});
+
 router.post('/users/category', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_user.setCategory(req.body['user_id'], req.body['category']).then(success => {

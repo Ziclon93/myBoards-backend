@@ -46,9 +46,7 @@ exports.signUp = function (u_email, u_name, u_pass) {
 };
 
 exports.setCategory = function (u_id, u_category) {
-
     return new Promise(function(resolve,reject){
-
         var UserModel = userModel(sequelize, DataTypes);
 
         UserModel.findOne({ where : { id: u_id} })
@@ -61,6 +59,27 @@ exports.setCategory = function (u_id, u_category) {
                 }
                 else {
                     resolve(false);
+                }
+            },function(err){
+                reject("Mysql error, check your query"+err);
+            });
+    });
+};
+
+exports.setIconUrl = function (u_id, u_iconUrl) {
+    return new Promise(function(resolve,reject){
+        var UserModel = userModel(sequelize, DataTypes);
+
+        UserModel.findOne({ where : { id: u_id} })
+            .then(function(user){
+                if(user) {
+                    user.update({
+                        iconUrl: u_iconUrl
+                    });
+                    resolve(u_iconUrl);
+                }
+                else {
+                    reject("Error updating iconUrl value")
                 }
             },function(err){
                 reject("Mysql error, check your query"+err);
