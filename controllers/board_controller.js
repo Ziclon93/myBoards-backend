@@ -62,7 +62,6 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
                 BoardModel.create({
                     userId : user['id'],
                     title: b_title,
-                    type: b_type,
                     iconUrl: b_iconUrl,
                 }).then(board => {
                     b_tags.forEach(tagName => {
