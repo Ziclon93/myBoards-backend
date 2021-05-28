@@ -21,22 +21,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     title: {
-      type: DataTypes.STRING
-    },
-    description: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     userId: {
       allowNull: false,
       type: DataTypes.STRING
     },
+    iconUrl: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
     updatedAt: {
       type: DataTypes.DATE
     },
-    type: {
-      allowNull: false,
-      type: DataTypes.STRING
-    }
   }, {
     sequelize,
     modelName: 'board',

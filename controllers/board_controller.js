@@ -48,7 +48,7 @@ exports.getFollowerBoards = function(f_name){
     });
 };
 
-exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
+exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
 
     return new Promise(function(resolve, reject) {
         const BoardModel = boardModel(sequelize, DataTypes);
@@ -62,8 +62,8 @@ exports.postBoard = function( user, b_title, b_description, b_type, b_tags) {
                 BoardModel.create({
                     userId : user['id'],
                     title: b_title,
-                    description: b_description,
                     type: b_type,
+                    iconUrl: b_iconUrl,
                 }).then(board => {
                     b_tags.forEach(tagName => {
                         ctl_tag.getTag(tagName).then(tag => {

@@ -9,12 +9,14 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING
-      },
-      description: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       userId: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      iconUrl: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -25,10 +27,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      type: {
-        allowNull: false,
-        type: Sequelize.STRING
-      }
     });
   },
   down: async (queryInterface, Sequelize) => {

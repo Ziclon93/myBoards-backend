@@ -122,9 +122,8 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
         ctl_board.postBoard( 
             user, 
             req.body['title'], 
-            req.body['description'], 
-            req.body['type'],
-            req.body['tags']
+            req.body['tags'],
+            req.body['iconUrl']
             )
             .then(function(success){
                 if(success){

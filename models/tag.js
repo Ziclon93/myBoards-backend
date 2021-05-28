@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     tagName: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     updatedAt: {
