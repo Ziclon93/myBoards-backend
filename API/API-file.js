@@ -128,16 +128,17 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
             .then(function(success){
                 if(success){
                     res.json({
-                        success: true,
+                        title: req.body['title'],
+                        tags: req.body['tags'],
+                        iconUrl: req.body['iconUrl']
                     })
                 }else {
-                    res.json({
-                        success: false,
-                    })
+                    throw error;
                 }
             }).catch((err) =>{
-                console.log("Login Rejected",err);
-                res.status(500).send("Internal server error" , err);
+                console.log("Post board",err);
+                res.statusCode = 500;
+                res.end("Error creating the board");
             });
     });
 });
