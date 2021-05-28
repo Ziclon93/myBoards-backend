@@ -130,7 +130,8 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
                     res.json({
                         title: req.body['title'],
                         tags: req.body['tags'],
-                        iconUrl: req.body['iconUrl']
+                        iconUrl: req.body['iconUrl'],
+                        valoration: 0.0,
                     })
                 }else {
                     throw error;
