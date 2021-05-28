@@ -14,9 +14,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING
-      },
-      description: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       userId:{
@@ -32,7 +30,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       rotation: {
+        allowNull: false,
         type: Sequelize.INTEGER
+      },
+      resourceUrl: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -41,9 +44,6 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE
       },
-      resourceUrl: {
-        type: Sequelize.STRING
-      }
     });
   },
   down: async (queryInterface, Sequelize) => {

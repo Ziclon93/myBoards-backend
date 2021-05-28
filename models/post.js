@@ -28,9 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING
     },
-    description: {
-      type: DataTypes.STRING
-    },
     userId:{
       allowNull: false,
       type: DataTypes.STRING
@@ -44,9 +41,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     rotation: {
+      allowNull: false,
       type: DataTypes.INTEGER
     },
     resourceUrl: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     updatedAt: {
