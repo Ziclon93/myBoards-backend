@@ -9,24 +9,35 @@ var ctl_post = require('../controllers/post_controller');
 exports.getUserValoration = function(user){
     
     return new Promise(function(resolve,reject) {
-        var postsValoration = 0;
-        await ctl_post.getUserPosts(user).then(userPostList =>{
+        var valorationPromises = [];
+
+        ctl_post.getUserPosts(user).then(userPostList =>{
             for(var post in userPostList){
-                postValoration += getPostValoration(post)
+                valorationPromises.push(getPostValoration(post));
             }
+           
+            ctl_board.getUserBoards(user).then(boardList =>{
+                for(var board in boardList){
+                    valorationPromises.push( getBoardValoration(board));
+                }
+
+                Promise.all(valorationPromises).then(valorationList =>{
+                    finalValoration = 0;
+                    for(valoration in valorationList){
+                        finalValoration += valoration;
+                    }
+
+                    resolve(finalValoration);
+                },function (err) {
+                    reject(err);
+                })
+
+            },function (err) {
+                reject(err);
+            })
         },function (err) {
             reject(err);
         });
-
-        var boardsValoration = 0;
-        await ctl_board.getUserBoards(user).then(boardList =>{
-            for(var board in boardList){
-                boardsValoration += getBoardValoration(board)
-            }
-        },function (err) {
-            reject(err);
-        })
-        resolve(postsValoration + boardsValoration);
     });
 }
 
