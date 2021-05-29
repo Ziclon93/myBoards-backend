@@ -9,39 +9,58 @@ var ctl_post = require('../controllers/post_controller');
 exports.getUserValoration = function(user){
     
     return new Promise(function(resolve,reject) {
-        var LikeModel = likeModel(sequelize, DataTypes);
-        var DislikeModel = dislikeModel(sequelize,DataTypes);
-
-        var userPosts = ctl_post.getUserPosts(user);
         var postsValoration = 0;
-        for(var post in userPosts){
-            LikeModel.count({where:{postId: post.id}}).then(function(postLikes){
-                DislikeModel.count({where:{postId: post.id}}).then(function(postDislikes){
-                    postsValoration += (postLikes - postDislikes)/100;
-                },function(err){
-                    reject("Mysql error, check your query"+err);
-                })
-            },function(err){
-                reject("Mysql error, check your query"+err);
-            });
-        }
-
-        var userBoards = ctl_board.getUserBoards(user);
+        await ctl_post.getUserPosts(user).then(userPostList =>{
+            for(var post in userPostList){
+                postValoration += getPostValoration(post)
+            }
+        },function (err) {
+            reject(err);
+        });
 
         var boardsValoration = 0;
-        for(var board in userBoards){
-            LikeModel.count({where:{boardId: board.id}}).then(function(boardLikes){
-                DislikeModel.count({where:{boardId: board.id}}).then(function(boardDislikes){
-                    boardsValoration += (boardLikes - boardDislikes)/100;
-                },function(err){
-                    reject("Mysql error, check your query"+err);
-                })
-            },function(err){
-                reject("Mysql error, check your query"+err);
-            });
-            
-        }
+        await ctl_board.getUserBoards(user).then(boardList =>{
+            for(var board in boardList){
+                boardsValoration += getBoardValoration(board)
+            }
+        },function (err) {
+            reject(err);
+        })
+        resolve(postsValoration + boardsValoration);
+    });
+}
 
-        resolve((postsValoration + boardsValoration) /2);
+exports.getBoardValoration = function(board){
+    
+    return new Promise(function(resolve,reject) {
+
+        var postValoration = 0;
+        ctl_post.getBoardPosts(board).then(postList =>{
+            for(post in postList){
+                getPostValoration(post).then(valoration =>{
+                    postValoration += valoration
+                },function(err){
+                    reject(err);
+                })
+            }
+        },function(err){
+            reject(err);
+        })
+    });
+}
+
+exports.getPostValoration = function(post){
+    return new Promise(function(resolve,reject) {
+
+        LikeModel.count({where:{postId: post.id}}).then(function(postLikes){
+            DislikeModel.count({where:{postId: post.id}}).then(function(postDislikes){
+                resolve((postLikes - postDislikes)/100);
+            },function(err){
+                reject(err);
+            })
+        },function(err){
+            reject(err);
+        });
+
     });
 }
