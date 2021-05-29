@@ -28,11 +28,26 @@ exports.postPost = function(user, b_id, p_title, p_description, p_url){
         resolve(success);
     });
 }
+
 exports.getUserPosts = function(user){
     return new Promise(function(resolve, reject){
         var PostModel = postModel(sequelize, DataTypes);
 
         PostModel.findAll({where:{userId: user.id}})
+         .then(function(data){
+           resolve(data);
+         }, function (err) {
+            console.log("Error ocurred: " + err);
+            reject(err);
+        });
+    });
+};
+
+exports.getBoardPosts = function(board){
+    return new Promise(function(resolve, reject){
+        var PostModel = postModel(sequelize, DataTypes);
+
+        PostModel.findAll({where:{boardId: board.id}})
          .then(function(data){
            resolve(data);
          }, function (err) {
