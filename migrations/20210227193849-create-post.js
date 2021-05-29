@@ -19,11 +19,11 @@ module.exports = {
       },
       x: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       y: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       rotation: {
         allowNull: false,

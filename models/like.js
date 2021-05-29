@@ -28,10 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    boardId:{
-      allowNull: false,
-      type: DataTypes.INTEGER
-    },
     updatedAt: {
       type: DataTypes.DATE
     }

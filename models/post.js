@@ -31,11 +31,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     x: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.FLOAT
     },
     y: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.FLOAT
     },
     rotation: {
       allowNull: false,
