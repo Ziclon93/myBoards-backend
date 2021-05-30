@@ -343,7 +343,7 @@ router.get('/board', asyncCheckAPIKey, function (req, res, next) {
                         title: board.title,
                         tags: promisesResults[0],
                         iconUrl: board.iconUrl,
-                        valoration: valoration,
+                        valoration: promisesResults[1],
                         postList: postList
                     })
                 },function(err){
