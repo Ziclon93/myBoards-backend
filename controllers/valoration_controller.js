@@ -18,20 +18,16 @@ exports.getUserValoration = function(user){
             }
            
             ctl_board.getUserBoards(user).then(boardList =>{
-                finalValoration = 0;
                 for(var board in boardList){
                     console.log("______________________2")
-                    valorationPromises.push( getBoardValoration(board).then(valoration =>{
-                        finalValoration += valoration
-                    },function (err) {
-                        reject(err);
-                    }));
-                    
-                    console.log("______________________3")
+                    valorationPromises.push( exports.getBoardValoration(board));
                 }
 
-                console.log("______________________4")
                 Promise.all(valorationPromises).then(valorationList =>{
+                    finalValoration = 0;
+                    for(valoration in valorationList){
+                        finalValoration += valoration;
+                    }
 
                     resolve(finalValoration);
                 },function (err) {
@@ -47,7 +43,7 @@ exports.getUserValoration = function(user){
 }
 
 exports.getBoardValoration = function(board){
-    console.log("______________________3.0")
+    console.log("______________________3.1")
     
     return new Promise(function(resolve,reject) {
         console.log("______________________3.1")

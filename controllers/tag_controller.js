@@ -12,8 +12,6 @@ exports.getTag = function(t_name){
         .spread(function(tagResult, created){
             resolve(tagResult);
         });
-    }, function (err) {
-        reject(err);
     });
 };
 
@@ -33,7 +31,5 @@ exports.postTagOfBoard = function(b_id, tag){
             reject(err);
         }); 
         resolve(success);
-    }, function (err) {
-        reject(err);
     });
 }
