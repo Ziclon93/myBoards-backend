@@ -25,8 +25,6 @@ exports.getUserValoration = function(user){
                 Promise.all(valorationPromises).then(valorationList =>{
                     finalValoration = 0;
                     valorationList.forEach( valoration =>{
-                        console.log("_______")
-                        console.log(valoration)
                         finalValoration += valoration;
                     });
 
