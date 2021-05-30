@@ -21,7 +21,7 @@ exports.getUserValoration = function(user){
            
             */
             ctl_board.getUserBoards(user).then(boardList =>{
-                boardList.array.forEach(board => {
+                boardList.forEach(board => {
                     console.log(board)
                     valorationPromises.push( exports.getBoardValoration(board));
                 });
