@@ -54,31 +54,28 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
         const BoardModel = boardModel(sequelize, DataTypes);
 
         if (user){
-                if(!b_title || /^\s*$/.test(b_title)){
-                    reject(Error("No valid title for board"));
-                }
-                else {
-                    BoardModel.create({
-                        userId : user['id'],
-                        title: b_title,
-                        iconUrl: b_iconUrl,
-                    }).then(board => {
-                        b_tags.forEach(tagName => {
-                            ctl_tag.getTag(tagName).then(tag => {
-                                ctl_tag.postTagOfBoard(board.id, tag)
-                            }).catch((err) =>{
-                                console.log("Tag Rejected",err);
-                            });
+            if(!b_title || /^\s*$/.test(b_title)){
+                reject(Error("No valid title for board"));
+            } else {
+                BoardModel.create({
+                    userId : user['id'],
+                    title: b_title,
+                    iconUrl: b_iconUrl,
+                }).then(board => {
+                    b_tags.forEach(tagName => {
+                        ctl_tag.getTag(tagName).then(tag => {
+                            ctl_tag.postTagOfBoard(board.id, tag)
+                        }).catch((err) =>{
+                            console.log("Tag Rejected",err);
                         });
-                        console.log("Board created");
-                        resolve(board);
-                    }, function (err) {
-                        reject(err);
                     });
-                }
+                    console.log("Board created");
+                    resolve(board);
+                }, function (err) {
+                    reject(err);
+                });
             }
-        }, function (err) {
-            reject(err);
-        }
-    );
+    } else{
+        reject(Error("Couldnt create board"));
+    }});
 };

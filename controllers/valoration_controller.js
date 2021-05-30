@@ -38,8 +38,6 @@ exports.getUserValoration = function(user){
         },function (err) {
             reject(err);
         });
-    },function (err) {
-        reject(err);
     });
 }
 
@@ -65,8 +63,8 @@ exports.getBoardValoration = function(board){
 exports.getPostValoration = function(post){
     return new Promise(function(resolve,reject) {
 
-        LikeModel.count({where:{postId: post.id}}).then(function(postLikes){
-            DislikeModel.count({where:{postId: post.id}}).then(function(postDislikes){
+        LikeModel.count({where:{postId: post.id}}).then(postLikes =>{
+            DislikeModel.count({where:{postId: post.id}}).then(postDislikes =>{
                 resolve((postLikes - postDislikes)/100);
             },function(err){
                 reject(err);
@@ -75,7 +73,5 @@ exports.getPostValoration = function(post){
             reject(err);
         });
 
-    },function (err) {
-        reject(err);
     });
 }
