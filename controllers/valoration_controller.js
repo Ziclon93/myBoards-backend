@@ -26,8 +26,11 @@ exports.getUserValoration = function(user){
                     },function (err) {
                         reject(err);
                     }));
+                    
+                    console.log("______________________3")
                 }
 
+                console.log("______________________4")
                 Promise.all(valorationPromises).then(valorationList =>{
 
                     resolve(finalValoration);
