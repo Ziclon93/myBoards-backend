@@ -12,13 +12,14 @@ exports.getUserValoration = function(user){
         var valorationPromises = [];
 
         ctl_post.getUserPosts(user).then(userPostList =>{
-            for(var post in userPostList){
+            userPostList.for(post => {
                 console.log("______________________1")
                 valorationPromises.push(exports.getPostValoration(post));
-            }
+                
+            });
            
             ctl_board.getUserBoards(user).then(boardList =>{
-                boardList.forEach(board => {
+                boardList.for(board => {
                     console.log(board)
                     valorationPromises.push( exports.getBoardValoration(board));
                     

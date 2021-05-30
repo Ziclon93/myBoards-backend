@@ -22,8 +22,8 @@ exports.getAllBoards = function(){
 exports.getUserBoards = function(user){
     return new Promise(function(resolve, reject){
         var BoardModel = boardModel(sequelize, DataTypes);
-        
-        BoardModel.findAll({where:{userId: user.id}})
+
+        BoardModel.findAll({where: {userId: user.id}})
          .then(function(data){
            resolve(data);
          }, function (err) {
