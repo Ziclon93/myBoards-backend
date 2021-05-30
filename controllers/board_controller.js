@@ -55,7 +55,7 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
 
         if (user){
                 if(!b_title || /^\s*$/.test(b_title)){
-                    reject(null);
+                    reject(Error("No valid title for board"));
                 }
                 else {
                     BoardModel.create({
