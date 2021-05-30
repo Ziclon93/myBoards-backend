@@ -341,7 +341,7 @@ router.get('/board', asyncCheckAPIKey, function (req, res, next) {
                     res.json({
                         id: board.id,
                         title: board.title,
-                        tags: tagList,
+                        tags: promisesResults[0],
                         iconUrl: board.iconUrl,
                         valoration: valoration,
                         postList: postList
