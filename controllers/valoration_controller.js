@@ -38,6 +38,8 @@ exports.getUserValoration = function(user){
         },function (err) {
             reject(err);
         });
+    },function (err) {
+        reject(err);
     });
 }
 
