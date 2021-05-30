@@ -78,5 +78,5 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
                 }
             }
         }
-    });
+    );
 };
