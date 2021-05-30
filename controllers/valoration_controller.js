@@ -18,10 +18,10 @@ exports.getUserValoration = function(user){
             }
            
             ctl_board.getUserBoards(user).then(boardList =>{
-                for(board in boardList){
-                    console.log(board)
+                boardList.forEach(board => {
+                    console.log(board.id)
                     valorationPromises.push( exports.getBoardValoration(board));
-                }
+                });
 
                 Promise.all(valorationPromises).then(valorationList =>{
                     finalValoration = 0;
