@@ -75,5 +75,7 @@ exports.getPostValoration = function(post){
             reject(err);
         });
 
+    },function (err) {
+        reject(err);
     });
 }
