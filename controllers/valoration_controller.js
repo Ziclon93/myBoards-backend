@@ -23,6 +23,8 @@ exports.getUserValoration = function(user){
                     console.log("______________________2")
                     valorationPromises.push( getBoardValoration(board).then(valoration =>{
                         finalValoration += valoration
+                    },function (err) {
+                        reject(err);
                     }));
                 }
 
