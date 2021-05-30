@@ -13,11 +13,13 @@ exports.getUserValoration = function(user){
 
         ctl_post.getUserPosts(user).then(userPostList =>{
             for(var post in userPostList){
+                console.log("______________________1")
                 valorationPromises.push(getPostValoration(post));
             }
            
             ctl_board.getUserBoards(user).then(boardList =>{
                 for(var board in boardList){
+                    console.log("______________________2")
                     valorationPromises.push( getBoardValoration(board));
                 }
 
@@ -27,13 +29,12 @@ exports.getUserValoration = function(user){
                         finalValoration += valoration;
                     }
 
+                    console.log("______________________4")
                     resolve(finalValoration);
                 },function (err) {
+                    console.log("______________________3")
                     reject(err);
-                }).catch(function(err) {
-                    reject.log(err); 
-                  })
-
+                })
             },function (err) {
                 reject(err);
             })
