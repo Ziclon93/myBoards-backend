@@ -24,11 +24,11 @@ exports.getUserValoration = function(user){
 
                 Promise.all(valorationPromises).then(valorationList =>{
                     finalValoration = 0;
-                    for(valoration in valorationList){
+                    valorationList.forEach( valoration =>{
                         console.log("_______")
                         console.log(valoration)
                         finalValoration += valoration;
-                    }
+                    });
 
                     resolve(finalValoration);
                 },function (err) {
