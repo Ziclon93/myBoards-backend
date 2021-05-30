@@ -18,7 +18,7 @@ exports.getUserValoration = function(user){
             }
            
             ctl_board.getUserBoards(user).then(boardList =>{
-                for(var board in boardList){
+                for(board in boardList){
                     console.log(board.id)
                     valorationPromises.push( exports.getBoardValoration(board));
                 }
