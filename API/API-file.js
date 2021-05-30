@@ -7,8 +7,6 @@ var ctl_post = require('../controllers/post_controller');
 var ctl_valoration = require('../controllers/valoration_controller');
 var ctl_tag = require('../controllers/tag_controller');
 const e = require('express');
-const { json } = require('sequelize/types');
-const post = require('../models/post');
 
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
