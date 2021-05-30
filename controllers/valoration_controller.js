@@ -48,16 +48,21 @@ exports.getBoardValoration = function(board){
     
     return new Promise(function(resolve,reject) {
 
-        var postValoration = 0;
+        var postValorationPromises = [];
         ctl_post.getBoardPosts(board).then(postList =>{
             for(post in postList){
-                getPostValoration(post).then(valoration =>{
-                    postValoration += valoration
-                },function(err){
-                    reject(err);
-                })
+                postValorationPromises.push(getPostValoration(post))
             }
-            resolve(postValoration)
+
+            Promise.all(postValorationPromises).then(valorations =>{
+                var finalValoration = 0;
+                for(valoration in valorations){
+                    finalValoration +=valorations 
+                }
+                resolve(finalValoration)
+            },function(err){
+                reject(err);
+            })
         },function(err){
             reject(err);
         })
