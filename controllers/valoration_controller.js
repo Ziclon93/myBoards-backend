@@ -57,6 +57,7 @@ exports.getBoardValoration = function(board){
                     reject(err);
                 })
             }
+            resolve(postValoration)
         },function(err){
             reject(err);
         })
