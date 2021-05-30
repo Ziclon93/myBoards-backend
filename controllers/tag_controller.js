@@ -24,7 +24,7 @@ exports.getBoardTags = function(board){
 
         BoardTagModel.findAll({where: {boardId: board.id }}).then(boardTags =>{
             boardTags.forEach(boardTag => {
-                TagModel.findOne(boardTag.tagId).then( tag =>{
+                TagModel.findOne({where:{id:boardTag.tagId}}).then( tag =>{
                     tagList.push(tag.tagName)
                 },function(err){
                     reject("Mysql error, check your query"+err);

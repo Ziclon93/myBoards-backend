@@ -36,8 +36,7 @@ exports.getUserBoards = function(user){
 exports.getBoardById = function(b_id){
     return new Promise(function(resolve, reject){
         var BoardModel = boardModel(sequelize, DataTypes);
-
-        BoardModel.findByPk( b_id)
+        BoardModel.findOne({where:{id: b_id}})
          .then(data =>{
             resolve(data);
          }, function (err) {
