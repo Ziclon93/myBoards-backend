@@ -14,7 +14,6 @@ exports.getUserValoration = function(user){
         ctl_post.getUserPosts(user).then(userPostList =>{
             
             userPostList.forEach(post => {
-                console.log("______________________1")
                 valorationPromises.push(exports.getPostValoration(post));
                 
             });
@@ -26,6 +25,8 @@ exports.getUserValoration = function(user){
                 Promise.all(valorationPromises).then(valorationList =>{
                     finalValoration = 0;
                     for(valoration in valorationList){
+                        console.log("_______")
+                        console.log(valoration)
                         finalValoration += valoration;
                     }
 
@@ -43,16 +44,12 @@ exports.getUserValoration = function(user){
 }
 
 exports.getBoardValoration = function(board){
-    console.log("______________________3.1")
     
     return new Promise(function(resolve,reject) {
-        console.log("______________________3.1")
 
         ctl_post.getBoardPosts(board).then(postList =>{
-            console.log("______________________3")
             var postValorationPromises = [];
             for(post in postList){
-                console.log("______________________4")
                 postValorationPromises.push(getPostValoration(post))
             }
 
