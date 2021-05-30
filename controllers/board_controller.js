@@ -54,9 +54,8 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
         const BoardModel = boardModel(sequelize, DataTypes);
 
         if (user){
-            try{
                 if(!b_title || /^\s*$/.test(b_title)){
-                    throw Error("Incorrect board title");
+                    reject(null);
                 }
                 else {
                     BoardModel.create({
@@ -77,8 +76,6 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
                         reject(err);
                     });
                 }
-            } catch(error){
-                reject(error);
             }
         }
     });
