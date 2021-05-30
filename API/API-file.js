@@ -314,62 +314,52 @@ router.get('/board', asyncCheckAPIKey, function (req, res, next) {
 
 
         ctl_board.getBoardById(req.body['boardId']).then(board =>{
-            ctl_tag.getBoardTags(board).then(tagList =>{
-                ctl_valoration.getBoardValoration(board).then( valoration =>{
-                    ctl_post.getBoardPosts(board).then( posts =>{
-                        var postValorationPromises = [];
-                        posts.forEach(post =>{
-                            postValorationPromises.push(ctl_valoration.getPostValoration(post));
-                        })
-                        Promise.all(postValorationPromises).then(valorations =>{
-                            var postList = [];
-                            valorations.forEach(valoration =>{
-                                postList.push(
-                                    json({
-                                        id: post.id,
-                                        x: post.x,
-                                        y: post.y,
-                                        rotation: post.rotation,
-                                        resourceUrl: post.resourceUrl,
-                                        valoration:valoration
-                                    })
-                                );
-                            });
-                            
-                            res.json({
-                                id: board.id,
-                                title: board.title,
-                                tags: tagList,
-                                iconUrl: board.iconUrl,
-                                valoration: valoration,
-                                postList: postList
+            var dataPromises = [];
+            dataPromises.push(ctl_tag.getBoardTags(board));
+            dataPromises.push(ctl_valoration.getBoardValoration(board));
+            dataPromises.push(ctl_post.getBoardPosts(board));
+            
+            Promise.all(dataPromises).then(promisesResults =>{
+                var postValorationPromises = [];
+                promisesResults[2].forEach(post =>{
+                    postValorationPromises.push(ctl_valoration.getPostValoration(post));
+                })
+                Promise.all(postValorationPromises).then(valorations =>{
+                    var postList = [];
+                    valorations.forEach(valoration =>{
+                        postList.push(
+                            json({
+                                id: post.id,
+                                x: post.x,
+                                y: post.y,
+                                rotation: post.rotation,
+                                resourceUrl: post.resourceUrl,
+                                valoration:valoration
                             })
-                        },function(err){
-                            reject(err);
-                        })
-                    }, function (err) {
-                        console.log("Get profile Rejected",err);
-                        res.status(500).send("Internal server error");
+                        );
+                    });
+                    res.json({
+                        id: board.id,
+                        title: board.title,
+                        tags: tagList,
+                        iconUrl: board.iconUrl,
+                        valoration: valoration,
+                        postList: postList
                     })
-                    
-                }, function (err) {
-                    console.log("Get profile Rejected",err);
+                },function(err){
+                    console.log("Get Board rejected",err);
                     res.status(500).send("Internal server error");
-                });
-                
+                })
             }, function (err) {
-                console.log("Get profile Rejected",err);
+                console.log("Get Board rejected",err);
                 res.status(500).send("Internal server error");
             });
-            
         }, function (err) {
-            console.log("Get profile Rejected",err);
+            console.log("Get Board rejected",err);
             res.status(500).send("Internal server error");
         })
-
-
     }, function (err) {
-        console.log("Get profile Rejected",err);
+        console.log("Get Board rejected",err);
         res.status(500).send("Internal server error");
     });
 });
