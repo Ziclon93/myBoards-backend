@@ -43,8 +43,10 @@ exports.getUserValoration = function(user){
 }
 
 exports.getBoardValoration = function(board){
+    console.log("______________________3.0")
     
     return new Promise(function(resolve,reject) {
+        console.log("______________________3.1")
 
         ctl_post.getBoardPosts(board).then(postList =>{
             console.log("______________________3")
