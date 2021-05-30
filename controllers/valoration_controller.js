@@ -30,7 +30,9 @@ exports.getUserValoration = function(user){
                     resolve(finalValoration);
                 },function (err) {
                     reject(err);
-                })
+                }).catch(function(err) {
+                    reject.log(err); 
+                  })
 
             },function (err) {
                 reject(err);
