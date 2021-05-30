@@ -109,6 +109,34 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
+router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
+    ctl_board.getAllBoards().then(boards => {
+        if(boards){
+            var list= [];
+            for (i in boards){
+                var elem = {
+                    id: boards[i].id,
+                    description: boards[i].description,
+                    title: boards[i].title,
+                    likes: boards[i].likes,
+                    type: boards[i].type,
+                    createdAt: boards[i].createdAt,
+                    updatedAt: boards[i].updatedAt
+                };
+                list.push(elem);
+            };
+            res.json(list);
+        }
+        else{
+            res.json({
+                success: false,
+            })
+        }
+    }, function (err) {
+        res.status(500).send("Internal server error");
+    });
+});
+
 /* As headers we have:
  * api-key : "Api key provided in the profile"
  * Content-Type : application/x-www-form-urlencoded
@@ -125,22 +153,19 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
             req.body['tags'],
             req.body['iconUrl']
             )
-            .then(function(success){
-                if(success){
-                    res.json({
-                        title: req.body['title'],
-                        tags: req.body['tags'],
-                        iconUrl: req.body['iconUrl'],
-                        valoration: 0.0,
-                        posts: []
-                    })
-                }else {
-                    throw error;
-                }
+            .then(function(board){
+                res.json({
+                    id: board.id,
+                    title: board.title,
+                    tags: req.body['tags'],
+                    iconUrl: board.iconUrl,
+                    valoration: 0.0,
+                    posts: []
+                })
             }).catch((err) =>{
                 console.log("Post board",err);
                 res.statusCode = 500;
-                res.end("Error creating the board");
+                res.end(err);
             });
     });
 });

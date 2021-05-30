@@ -53,31 +53,32 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
     return new Promise(function(resolve, reject) {
         const BoardModel = boardModel(sequelize, DataTypes);
 
-        var success = true;
         if (user){
-            if(!b_title || /^\s*$/.test(b_title)){
-                resolve(!success);
-            }
-            else {
-                BoardModel.create({
-                    userId : user['id'],
-                    title: b_title,
-                    iconUrl: b_iconUrl,
-                }).then(board => {
-                    b_tags.forEach(tagName => {
-                        ctl_tag.getTag(tagName).then(tag => {
-                            ctl_tag.postTagOfBoard(board.id, tag)
-                        }).catch((err) =>{
-                            console.log("Tag Rejected",err);
+            try{
+                if(!b_title || /^\s*$/.test(b_title)){
+                    throw Error("Incorrect board title");
+                }
+                else {
+                    BoardModel.create({
+                        userId : user['id'],
+                        title: b_title,
+                        iconUrl: b_iconUrl,
+                    }).then(board => {
+                        b_tags.forEach(tagName => {
+                            ctl_tag.getTag(tagName).then(tag => {
+                                ctl_tag.postTagOfBoard(board.id, tag)
+                            }).catch((err) =>{
+                                console.log("Tag Rejected",err);
+                            });
                         });
+                        console.log("Board created");
+                        resolve(board);
+                    }, function (err) {
+                        reject(err);
                     });
-                    console.log("Board created");
-                }, function (err) {
-                    console.log("Error ocurred: " + err);
-                    reject(err);
-                });
-
-                resolve(success);
+                }
+            } catch(error){
+                reject(error);
             }
         }
     });
