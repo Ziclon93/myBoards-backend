@@ -33,6 +33,20 @@ exports.getUserBoards = function(user){
     });
 };
 
+exports.getBoardById = function(b_id){
+    return new Promise(function(resolve, reject){
+        var BoardModel = boardModel(sequelize, DataTypes);
+
+        BoardModel.findOne({where: {id: b_id}})
+         .then(data =>{
+            resolve(data);
+         }, function (err) {
+            console.log("Error ocurred: " + err);
+            reject(err);
+        });
+    });
+};
+
 exports.getFollowerBoards = function(f_name){
     return new Promise(function(resolve, reject){
         var BoardModel = boardModel(sequelize, DataTypes);

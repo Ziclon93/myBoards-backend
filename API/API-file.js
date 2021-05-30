@@ -5,7 +5,10 @@ var ctl_board = require('../controllers/board_controller');
 var ctl_follow = require('../controllers/follow_controller');
 var ctl_post = require('../controllers/post_controller');
 var ctl_valoration = require('../controllers/valoration_controller');
+var ctl_tag = require('../controllers/tag_controller');
 const e = require('express');
+const { json } = require('sequelize/types');
+const post = require('../models/post');
 
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
@@ -302,6 +305,71 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
             console.log("Get profile Rejected",err);
             res.status(500).send("Internal server error");
         })
+    }, function (err) {
+        console.log("Get profile Rejected",err);
+        res.status(500).send("Internal server error");
+    });
+});
+
+router.get('/board', asyncCheckAPIKey, function (req, res, next) {
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+
+
+        ctl_board.getBoardById(req.body['boardId']).then(board =>{
+            ctl_tag.getBoardTags(board).then(tagList =>{
+                ctl_valoration.getBoardValoration(board).then( valoration =>{
+                    ctl_post.getBoardPosts(board).then( posts =>{
+                        var postValorationPromises = [];
+                        posts.forEach(post =>{
+                            postValorationPromises.push(ctl_valoration.getPostValoration(post));
+                        })
+                        Promise.all(postValorationPromises).then(valorations =>{
+                            var postList = [];
+                            valorations.forEach(valoration =>{
+                                postList.push(
+                                    json({
+                                        id: post.id,
+                                        x: post.x,
+                                        y: post.y,
+                                        rotation: post.rotation,
+                                        resourceUrl: post.resourceUrl,
+                                        valoration:valoration
+                                    })
+                                );
+                            });
+                            
+                            res.json({
+                                id: board.id,
+                                title: board.title,
+                                tags: tagList,
+                                iconUrl: board.iconUrl,
+                                valoration: valoration,
+                                postList: postList
+                            })
+                        },function(err){
+                            reject(err);
+                        })
+                    }, function (err) {
+                        console.log("Get profile Rejected",err);
+                        res.status(500).send("Internal server error");
+                    })
+                    
+                }, function (err) {
+                    console.log("Get profile Rejected",err);
+                    res.status(500).send("Internal server error");
+                });
+                
+            }, function (err) {
+                console.log("Get profile Rejected",err);
+                res.status(500).send("Internal server error");
+            });
+            
+        }, function (err) {
+            console.log("Get profile Rejected",err);
+            res.status(500).send("Internal server error");
+        })
+
+
     }, function (err) {
         console.log("Get profile Rejected",err);
         res.status(500).send("Internal server error");
