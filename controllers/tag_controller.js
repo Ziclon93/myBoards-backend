@@ -17,9 +17,10 @@ exports.getTag = function(t_name){
 exports.getTagById = function(t_id){
     return new Promise(function(resolve, reject){
         var TagModel = tagModel(sequelize, DataTypes);
-        TagModel.findOrCreate({ where : { id: t_id} })
-        .spread(function(tagResult, created){
-            resolve(tagResult);
+        TagModel.findOne({ where : { id: t_id} }).then(tag=>{
+            resolve(tag);
+        },function(err){
+            reject("Mysql error, check your query"+err);
         });
     });
 };
@@ -27,7 +28,6 @@ exports.getTagById = function(t_id){
 exports.getBoardTags = function(board){
     return new Promise(function(resolve, reject){
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
-        var TagModel = tagModel(sequelize, DataTypes);
 
         var tagList = [];
         var tagPromises= []
