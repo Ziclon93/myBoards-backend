@@ -309,7 +309,7 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
-router.get('/board', asyncCheckAPIKey, function (req, res, next) {
+router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
 
 
