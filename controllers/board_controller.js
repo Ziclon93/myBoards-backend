@@ -78,8 +78,8 @@ exports.postBoard = function( user, b_title, b_tags, b_iconUrl) {
                     b_tags.forEach(tagName => {
                         ctl_tag.getTag(tagName).then(tag => {
                             ctl_tag.postTagOfBoard(board.id, tag)
-                        }).catch((err) =>{
-                            console.log("Tag Rejected",err);
+                        }, function (err) {
+                            reject(err);
                         });
                     });
                     console.log("Board created");
