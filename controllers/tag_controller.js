@@ -35,8 +35,10 @@ exports.getBoardTags = function(board){
 
         console.log("________________________")
         Promise.all(tagPromises).then(tags =>{
-            console.log(tag.tagName)
-            tagList.push(tag.tagName)
+            tags.forEach(tag =>{
+                console.log(tag.tagName)
+                tagList.push(tag.tagName)
+            })
         },function(err){
             reject("Mysql error, check your query"+err);
         })
