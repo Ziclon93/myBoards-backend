@@ -14,6 +14,16 @@ exports.getTag = function(t_name){
     });
 };
 
+exports.getTagById = function(t_id){
+    return new Promise(function(resolve, reject){
+        var TagModel = tagModel(sequelize, DataTypes);
+        TagModel.findOrCreate({ where : { tagId: t_id} })
+        .spread(function(tagResult, created){
+            resolve(tagResult);
+        });
+    });
+};
+
 exports.getBoardTags = function(board){
     return new Promise(function(resolve, reject){
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
@@ -24,13 +34,7 @@ exports.getBoardTags = function(board){
 
         BoardTagModel.findAll({where: {boardId: board.id }}).then(boardTags =>{
             boardTags.forEach(boardTag => {
-                TagModel.findOne({where:{id: boardTag.tagId}}).then( tag =>{
-                    console.log("________________________")
-                    console.log(tag.tagName)
-                    console.log("________________________")
-                },function(err){
-                    reject("Mysql error, check your query"+err);
-                });
+                tagPromises.push(exports.getTagById(boardTag.tagId));
             },function(err){
                 reject("Mysql error, check your query"+err);
             });
