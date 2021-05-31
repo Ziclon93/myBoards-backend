@@ -18,10 +18,6 @@ exports.getTagById = function(t_id){
     return new Promise(function(resolve, reject){
         var TagModel = tagModel(sequelize, DataTypes);
         TagModel.findOne({ where : { id: t_id} }).then(tag=>{
-            
-            console.log("______________1__________");
-            console.log(tag.tagName);
-            console.log("______________1__________");
             resolve(tag);
         },function(err){
             reject("Mysql error, check your query"+err);
@@ -43,13 +39,11 @@ exports.getBoardTags = function(board){
                 reject("Mysql error, check your query"+err);
             });
             Promise.all(tagPromises).then(tags =>{
-            
-                console.log("________________________")
                 tags.forEach(tag =>{
                     console.log(tag.tagName)
                     tagList.push(tag.tagName)
                 })
-                console.log("________________________")
+                resolve(tagList);
             },function(err){
                 reject("Mysql error, check your query"+err);
             })
@@ -57,7 +51,6 @@ exports.getBoardTags = function(board){
 
         
         
-        resolve(tagList);
     });
 };
 
