@@ -42,20 +42,20 @@ exports.getBoardTags = function(board){
             },function(err){
                 reject("Mysql error, check your query"+err);
             });
-            console.log()
+            Promise.all(tagPromises).then(tags =>{
+            
+                console.log("________________________")
+                tags.forEach(tag =>{
+                    console.log(tag.tagName)
+                    tagList.push(tag.tagName)
+                })
+                console.log("________________________")
+            },function(err){
+                reject("Mysql error, check your query"+err);
+            })
         })
 
-        Promise.all(tagPromises).then(tags =>{
-            
-            console.log("________________________")
-            tags.forEach(tag =>{
-                console.log(tag.tagName)
-                tagList.push(tag.tagName)
-            })
-            console.log("________________________")
-        },function(err){
-            reject("Mysql error, check your query"+err);
-        })
+        
         
         resolve(tagList);
     });
