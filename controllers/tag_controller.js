@@ -54,6 +54,28 @@ exports.getBoardTags = function(board){
     });
 };
 
+exports.getMostUsedTags = function(){
+    
+    return new Promise(function(resolve,reject) {
+        var BoardTagModel = boardTagModel(sequelize, DataTypes);
+        BoardTagModel.findAll(
+            {attributes: [[sequelize.fn('MAX',sequelize.col('tagId')), 'tagId']],
+        group: ['tagId'],
+        raw: true,
+        limit: 5,
+    }).then(list=>{
+            list.forEach(boardTag =>{
+                console.log("____________________________")
+                console.log(boardTag.tagId)
+                console.log("____________________________")
+            })
+        },function(err){
+            reject("Mysql error, check your query"+err);
+        });
+        resolve(true);
+    });
+}
+
 exports.postTagOfBoard = function(b_id, tag){
     
     return new Promise(function(resolve,reject) {

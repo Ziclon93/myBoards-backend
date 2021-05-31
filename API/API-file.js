@@ -313,6 +313,8 @@ router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
 
 
+        ctl_tag.getMostUsedTags();
+
         ctl_board.getBoardById(req.query['boardId']).then(board =>{
             var dataPromises = [];
             dataPromises.push(ctl_tag.getBoardTags(board));
