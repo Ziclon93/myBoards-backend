@@ -22,19 +22,27 @@ exports.getBoardTags = function(board){
         var TagModel = tagModel(sequelize, DataTypes);
 
         var tagList = [];
+        var tagPromises= []
 
         BoardTagModel.findAll({where: {boardId: board.id }}).then(boardTags =>{
             boardTags.forEach(boardTag => {
-                TagModel.findOne({where:{id:boardTag.tagId}}).then( tag =>{
-                    tagList.push(tag.tagName)
-                },function(err){
-                    reject("Mysql error, check your query"+err);
-                });
+                tagPromises.push(TagModel.findOne({where:{id: boardTag.tagId}}))
             },function(err){
                 reject("Mysql error, check your query"+err);
             });
-            resolve(tagList);
+            console.log()
         })
+
+        console.log("________________________")
+        Promise.all(tagPromises).then(tags =>{
+            console.log(tag.tagName)
+            tagList.push(tag.tagName)
+        },function(err){
+            reject("Mysql error, check your query"+err);
+        })
+        console.log("________________________")
+        
+        resolve(tagList);
     });
 };
 
