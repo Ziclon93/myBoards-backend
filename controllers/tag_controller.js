@@ -9,8 +9,6 @@ exports.getTag = function(t_name){
         var TagModel = tagModel(sequelize, DataTypes);
         TagModel.findOrCreate({ where : { tagName: t_name} })
         .spread(function(tagResult, created){
-            console.log("____________________________")
-            console.log(tagResult)
             resolve(tagResult);
         });
     });
@@ -26,23 +24,26 @@ exports.getBoardTags = function(board){
 
         BoardTagModel.findAll({where: {boardId: board.id }}).then(boardTags =>{
             boardTags.forEach(boardTag => {
-                tagPromises.push(TagModel.findOne({where:{id: boardTag.tagId}}))
+                TagModel.findOne({where:{id: boardTag.tagId}}).then( tag =>{
+                    console.log("________________________")
+                    console.log(tag.tagName)
+                    console.log("________________________")
+                },function(err){
+                    reject("Mysql error, check your query"+err);
+                });
             },function(err){
                 reject("Mysql error, check your query"+err);
             });
             console.log()
         })
 
-        console.log("________________________")
         Promise.all(tagPromises).then(tags =>{
             tags.forEach(tag =>{
-                console.log(tag.tagName)
                 tagList.push(tag.tagName)
             })
         },function(err){
             reject("Mysql error, check your query"+err);
         })
-        console.log("________________________")
         
         resolve(tagList);
     });
