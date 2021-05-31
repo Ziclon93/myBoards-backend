@@ -18,6 +18,10 @@ exports.getTagById = function(t_id){
     return new Promise(function(resolve, reject){
         var TagModel = tagModel(sequelize, DataTypes);
         TagModel.findOne({ where : { id: t_id} }).then(tag=>{
+            
+            console.log("______________1__________");
+            console.log(tag.tagName);
+            console.log("______________1__________");
             resolve(tag);
         },function(err){
             reject("Mysql error, check your query"+err);
