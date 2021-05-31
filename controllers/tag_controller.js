@@ -17,7 +17,7 @@ exports.getTag = function(t_name){
 exports.getTagById = function(t_id){
     return new Promise(function(resolve, reject){
         var TagModel = tagModel(sequelize, DataTypes);
-        TagModel.findOrCreate({ where : { tagId: t_id} })
+        TagModel.findOrCreate({ where : { id: t_id} })
         .spread(function(tagResult, created){
             resolve(tagResult);
         });
@@ -42,9 +42,13 @@ exports.getBoardTags = function(board){
         })
 
         Promise.all(tagPromises).then(tags =>{
+            
+            console.log("________________________")
             tags.forEach(tag =>{
+                console.log(tag.tagName)
                 tagList.push(tag.tagName)
             })
+            console.log("________________________")
         },function(err){
             reject("Mysql error, check your query"+err);
         })
