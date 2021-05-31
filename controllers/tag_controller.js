@@ -6,10 +6,11 @@ var DataTypes = require('sequelize/lib/data-types');
 
 exports.getTag = function(t_name){
     return new Promise(function(resolve, reject){
-        
         var TagModel = tagModel(sequelize, DataTypes);
         TagModel.findOrCreate({ where : { tagName: t_name} })
         .spread(function(tagResult, created){
+            console.log("____________________________")
+            console.log(tagResult)
             resolve(tagResult);
         });
     });
