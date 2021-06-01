@@ -336,14 +336,15 @@ function getBoardData(board){
                         })
                     );
                 });
-                resolve( json({
+                var result = json({
                     id: board.id,
                     title: board.title,
                     tags: promisesResults[0],
                     iconUrl: board.iconUrl,
                     valoration: promisesResults[1],
                     postList: postList
-                }));
+                })
+                resolve(result);
             },function(err){
                 reject("Error getting board") 
             })
