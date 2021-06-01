@@ -101,7 +101,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 res.statusCode = 500;
                 res.end("Get Board rejected");
             });
-            res.json(list);
+            res.send(json(list));
         }
         else{
             res.json({
@@ -275,7 +275,7 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
                 username: user.username,
                 iconUrl: user.iconUrl,
                 valoration: valoration,
-            })
+            });
         }, function (err) {
             console.log("Get profile Rejected",err);
             res.status(500).send("Internal server error");
