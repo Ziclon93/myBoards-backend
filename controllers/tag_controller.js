@@ -40,7 +40,6 @@ exports.getBoardTags = function(board){
             });
             Promise.all(tagPromises).then(tags =>{
                 tags.forEach(tag =>{
-                    console.log(tag.tagName)
                     tagList.push(tag.tagName)
                 })
                 resolve(tagList);
