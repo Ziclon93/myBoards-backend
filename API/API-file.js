@@ -94,7 +94,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
             });
             Promise.all(promiseList).then(boardList =>{
                 boardList.forEach(boardData =>{
-                    resultList.push(boardData);
+                    resultList.push(json(boardData));
                 });
                 res.send(list);
             }, function (err) {
@@ -290,7 +290,7 @@ router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
             ctl_board.getBoardById(req.query['boardId']).then(board =>{
                 getBoardData(board).then(boardData =>{
-                    res.send(boardData);
+                    res.json(boardData);
                 }, function (err) {
                     console.log("Get Board rejected",err);
                     res.status(500).send("Internal server error");
@@ -331,7 +331,7 @@ function getBoardData(board){
                         })
                     );
                 });
-                var result = json({
+                resolve({
                     id: board.id,
                     title: board.title,
                     tags: promisesResults[0],
@@ -339,7 +339,6 @@ function getBoardData(board){
                     valoration: promisesResults[1],
                     postList: postList
                 });
-                resolve(result);
             },function(err){
                 reject("Error getting board") 
             })
