@@ -358,14 +358,14 @@ function getBoardData(board) {
                         })
                     );
                 });
-                resolve(json({
+                resolve({
                     id: board.id,
                     title: board.title,
                     tags: promisesResults[0],
                     iconUrl: board.iconUrl,
                     valoration: promisesResults[1],
                     postList: postList
-                }));
+                });
 
             }, function (err) {
                 reject("Get Board rejected");
