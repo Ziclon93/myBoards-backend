@@ -87,7 +87,7 @@ router.post('/login', function (req, res, next) {
 router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     ctl_board.getAllBoards().then(boards => {
         if (boards) {
-            var resultList = json();
+            var resultList = [];
             var promiseList = [];
             boards.forEach(board => {
                 var dataPromises = [];
@@ -130,7 +130,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                     console.log("Get Board rejected", err);
                     res.status(500).send("Internal server error");
                 });
-                res.resultList;
+                res.json(resultList);
             }, function (err) {
                 console.log(err);
                 res.statusCode = 500;
