@@ -95,7 +95,9 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 }else{
                     throw Error("Get all boards rejected")
                 }
+                console.log("____________:1")
             });
+            console.log("____________:")
             res.json(list);
         }
         else{
@@ -328,7 +330,6 @@ function getBoardData(board){
                     })
                 );
             });
-            console.log("____________:")
             return json({
                 id: board.id,
                 title: board.title,
