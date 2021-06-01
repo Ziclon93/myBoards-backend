@@ -87,7 +87,7 @@ router.post('/login', function (req, res, next) {
 router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     ctl_board.getAllBoards().then(boards => {
         if (boards) {
-            var resultList = [];
+            var resultList = json();
             var promiseList = [];
             boards.forEach(board => {
                 var dataPromises = [];
