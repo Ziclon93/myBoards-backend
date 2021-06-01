@@ -94,42 +94,43 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 dataPromises.push(ctl_tag.getBoardTags(board));
                 dataPromises.push(ctl_valoration.getBoardValoration(board));
                 dataPromises.push(ctl_post.getBoardPosts(board));
-                (async () => {
-                    await Promise.all(dataPromises).then(promisesResults => {
-                        var postValorationPromises = [];
-                        promisesResults[2].forEach(post => {
-                            postValorationPromises.push(ctl_valoration.getPostValoration(post));
-                        })
-                        Promise.all(postValorationPromises).then(valorations => {
-                            var postList = [];
-                            valorations.forEach(valoration => {
-                                postList.push(
-                                    json({
-                                        id: post.id,
-                                        x: post.x,
-                                        y: post.y,
-                                        rotation: post.rotation,
-                                        resourceUrl: post.resourceUrl,
-                                        valoration: valoration
-                                    })
-                                );
-                            });
-                            resultList.push(json({
-                                id: board.id,
-                                title: board.title,
-                                tags: promisesResults[0],
-                                iconUrl: board.iconUrl,
-                                valoration: promisesResults[1],
-                                postList: postList
-                            }));
-                        }, function (err) {
-                            console.log("Get Board rejected", err);
-                            res.status(500).send("Internal server error");
+                var result = Promise.all(dataPromises).then(promisesResults => {
+                    var postValorationPromises = [];
+                    promisesResults[2].forEach(post => {
+                        postValorationPromises.push(ctl_valoration.getPostValoration(post));
+                    })
+                    Promise.all(postValorationPromises).then(valorations => {
+                        var postList = [];
+                        valorations.forEach(valoration => {
+                            postList.push(
+                                json({
+                                    id: post.id,
+                                    x: post.x,
+                                    y: post.y,
+                                    rotation: post.rotation,
+                                    resourceUrl: post.resourceUrl,
+                                    valoration: valoration
+                                })
+                            );
                         });
+                        resultList.push(json({
+                            id: board.id,
+                            title: board.title,
+                            tags: promisesResults[0],
+                            iconUrl: board.iconUrl,
+                            valoration: promisesResults[1],
+                            postList: postList
+                        }));
                     }, function (err) {
                         console.log("Get Board rejected", err);
                         res.status(500).send("Internal server error");
                     });
+                }, function (err) {
+                    console.log("Get Board rejected", err);
+                    res.status(500).send("Internal server error");
+                });
+
+                Promise.all(result).then(resultData =>{
                     res.resultList;
                 });
             }, function (err) {
