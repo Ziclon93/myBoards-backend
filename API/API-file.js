@@ -96,12 +96,12 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 boardList.forEach(boardData =>{
                     resultList.push(boardData);
                 });
+                res.json(list);
             }, function (err) {
                 console.log(err);
                 res.statusCode = 500;
                 res.end("Get Board rejected");
             });
-            res.json(list);
         }
         else{
             res.json({
