@@ -96,7 +96,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 boardList.forEach(boardData =>{
                     resultList.push(boardData);
                 });
-                res.json(list);
+                res.send(list);
             }, function (err) {
                 console.log(err);
                 res.statusCode = 500;
