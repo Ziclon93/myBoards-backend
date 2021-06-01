@@ -94,7 +94,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 dataPromises.push(ctl_tag.getBoardTags(board));
                 dataPromises.push(ctl_valoration.getBoardValoration(board));
                 dataPromises.push(ctl_post.getBoardPosts(board));
-                var result = Promise.all(dataPromises).then(promisesResults => {
+                Promise.all(dataPromises).then(promisesResults => {
                     var postValorationPromises = [];
                     promisesResults[2].forEach(post => {
                         postValorationPromises.push(ctl_valoration.getPostValoration(post));
@@ -121,6 +121,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                             valoration: promisesResults[1],
                             postList: postList
                         }));
+                        
                     }, function (err) {
                         console.log("Get Board rejected", err);
                         res.status(500).send("Internal server error");
@@ -129,15 +130,12 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                     console.log("Get Board rejected", err);
                     res.status(500).send("Internal server error");
                 });
-
-                Promise.all(result).then(resultData =>{
-                    res.resultList;
-                });
             }, function (err) {
                 console.log(err);
                 res.statusCode = 500;
                 res.end("Get Board rejected");
             });
+            res.resultList;
         }
         else {
             res.json({
