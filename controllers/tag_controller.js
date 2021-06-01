@@ -65,9 +65,9 @@ exports.getMostUsedTags = function(){
         limit: 5,
     }).then(list=>{
             list.forEach(boardTag =>{
-                console.log("____________________________")
-                console.log(boardTag.tagId)
-                console.log("____________________________")
+                console.log("____________________________");
+                console.log(boardTag.tagId);
+                console.log("____________________________");
             })
         },function(err){
             reject("Mysql error, check your query"+err);

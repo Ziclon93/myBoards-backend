@@ -7,6 +7,8 @@ var ctl_post = require('../controllers/post_controller');
 var ctl_valoration = require('../controllers/valoration_controller');
 var ctl_tag = require('../controllers/tag_controller');
 const e = require('express');
+const board = require('../models/board');
+const { json } = require('express');
 
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
@@ -85,47 +87,15 @@ router.post('/login', function (req, res, next) {
 router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     ctl_board.getAllBoards().then(boards => {
         if(boards){
-            var list= [];
-            for (i in boards){
-                var elem = {
-                    id: boards[i].id,
-                    description: boards[i].description,
-                    title: boards[i].title,
-                    likes: boards[i].likes,
-                    type: boards[i].type,
-                    createdAt: boards[i].createdAt,
-                    updatedAt: boards[i].updatedAt
-                };
-                list.push(elem);
-            };
-            res.json(list);
-        }
-        else{
-            res.json({
-                success: false,
-            })
-        }
-    }, function (err) {
-        res.status(500).send("Internal server error");
-    });
-});
-
-router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
-    ctl_board.getAllBoards().then(boards => {
-        if(boards){
-            var list= [];
-            for (i in boards){
-                var elem = {
-                    id: boards[i].id,
-                    description: boards[i].description,
-                    title: boards[i].title,
-                    likes: boards[i].likes,
-                    type: boards[i].type,
-                    createdAt: boards[i].createdAt,
-                    updatedAt: boards[i].updatedAt
-                };
-                list.push(elem);
-            };
+            var resultList= [];
+            boards.forEach( board=>{
+                var boardData = getBoardData(board);
+                if(boardData){
+                    resultList.push(boardData);
+                }else{
+                    throw Error("Get all boards rejected")
+                }
+            });
             res.json(list);
         }
         else{
@@ -311,51 +281,15 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
 
 router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
-
-
         ctl_tag.getMostUsedTags();
 
         ctl_board.getBoardById(req.query['boardId']).then(board =>{
-            var dataPromises = [];
-            dataPromises.push(ctl_tag.getBoardTags(board));
-            dataPromises.push(ctl_valoration.getBoardValoration(board));
-            dataPromises.push(ctl_post.getBoardPosts(board));
-            
-            Promise.all(dataPromises).then(promisesResults =>{
-                var postValorationPromises = [];
-                promisesResults[2].forEach(post =>{
-                    postValorationPromises.push(ctl_valoration.getPostValoration(post));
-                })
-                Promise.all(postValorationPromises).then(valorations =>{
-                    var postList = [];
-                    valorations.forEach(valoration =>{
-                        postList.push(
-                            json({
-                                id: post.id,
-                                x: post.x,
-                                y: post.y,
-                                rotation: post.rotation,
-                                resourceUrl: post.resourceUrl,
-                                valoration:valoration
-                            })
-                        );
-                    });
-                    res.json({
-                        id: board.id,
-                        title: board.title,
-                        tags: promisesResults[0],
-                        iconUrl: board.iconUrl,
-                        valoration: promisesResults[1],
-                        postList: postList
-                    })
-                },function(err){
-                    console.log("Get Board rejected",err);
-                    res.status(500).send("Internal server error");
-                })
-            }, function (err) {
-                console.log("Get Board rejected",err);
-                res.status(500).send("Internal server error");
-            });
+            var boardData = getBoardData(board);
+            if(boardData){
+                res.boardData;
+            }else{
+                throw Error("Get board rejected")
+            }
         }, function (err) {
             console.log("Get Board rejected",err);
             res.status(500).send("Internal server error");
@@ -365,5 +299,47 @@ router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
         res.status(500).send("Internal server error");
     });
 });
+
+function getBoardData(board){
+    var dataPromises = [];
+    dataPromises.push(ctl_tag.getBoardTags(board));
+    dataPromises.push(ctl_valoration.getBoardValoration(board));
+    dataPromises.push(ctl_post.getBoardPosts(board));
+
+    Promise.all(dataPromises).then(promisesResults =>{
+        var postValorationPromises = [];
+        promisesResults[2].forEach(post =>{
+            postValorationPromises.push(ctl_valoration.getPostValoration(post));
+        })
+        Promise.all(postValorationPromises).then(valorations =>{
+            var postList = [];
+            valorations.forEach(valoration =>{
+                postList.push(
+                    json({
+                        id: post.id,
+                        x: post.x,
+                        y: post.y,
+                        rotation: post.rotation,
+                        resourceUrl: post.resourceUrl,
+                        valoration:valoration
+                    })
+                );
+            });
+            return json({
+                id: board.id,
+                title: board.title,
+                tags: promisesResults[0],
+                iconUrl: board.iconUrl,
+                valoration: promisesResults[1],
+                postList: postList
+            })
+        },function(err){
+            return json()
+        })
+    }, function (err) {
+        return json()
+    });
+    return json()
+}
 
 module.exports = router;
