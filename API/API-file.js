@@ -281,19 +281,22 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
 
 router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
-        ctl_tag.getMostUsedTags();
-
-        ctl_board.getBoardById(req.query['boardId']).then(board =>{
-            var boardData = getBoardData(board);
-            if(boardData){
-                res.boardData;
-            }else{
-                throw Error("Get board rejected")
-            }
-        }, function (err) {
-            console.log("Get Board rejected",err);
-            res.status(500).send("Internal server error");
-        })
+        if(user){
+            ctl_board.getBoardById(req.query['boardId']).then(board =>{
+                var boardData = getBoardData(board);
+                if(boardData){
+                    res.boardData;
+                }else{
+                    throw Error("Get board rejected")
+                }
+            }, function (err) {
+                console.log("Get Board rejected",err);
+                res.status(500).send("Internal server error");
+            })
+        }else{
+            throw Error("Get Board rejected");
+        }
+        
     }, function (err) {
         console.log("Get Board rejected",err);
         res.status(500).send("Internal server error");
@@ -325,6 +328,7 @@ function getBoardData(board){
                     })
                 );
             });
+            console.log("____________:")
             return json({
                 id: board.id,
                 title: board.title,
