@@ -92,10 +92,11 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 var boardData = getBoardData(board);
                 if(boardData){
                     resultList.push(boardData);
+                    console.log("____________:1")
                 }else{
+                    console.log("____________:2")
                     throw Error("Get all boards rejected")
                 }
-                console.log("____________:1")
             });
             console.log("____________:")
             res.json(list);
@@ -106,7 +107,9 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
             })
         }
     }, function (err) {
-        res.status(500).send("Internal server error");
+        console.log("iconUrl update rejected",err);
+        res.statusCode = 500;
+        res.end("iconUrl update rejected");
     });
 });
 
