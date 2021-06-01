@@ -331,7 +331,6 @@ function getBoardData(board){
                         })
                     );
                 });
-                console.log("__________________________")
                 var result = json({
                     id: board.id,
                     title: board.title,
@@ -339,7 +338,7 @@ function getBoardData(board){
                     iconUrl: board.iconUrl,
                     valoration: promisesResults[1],
                     postList: postList
-                })
+                });
                 resolve(result);
             },function(err){
                 reject("Error getting board") 
