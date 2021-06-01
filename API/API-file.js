@@ -97,13 +97,10 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                     resultList.push(boardData);
                 });
             }, function (err) {
-                console.log("iconUrl update rejected",err);
+                console.log(err);
                 res.statusCode = 500;
-                res.end("iconUrl update rejected");
+                res.end("Get Board rejected");
             });
-            
-            
-            console.log("____________:")
             res.json(list);
         }
         else{
@@ -112,9 +109,9 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
             })
         }
     }, function (err) {
-        console.log("iconUrl update rejected",err);
+        console.log(err);
         res.statusCode = 500;
-        res.end("iconUrl update rejected");
+        res.end("Get Board rejected");
     });
 });
 
@@ -353,7 +350,6 @@ function getBoardData(board){
         }, function (err) {
             reject("Error getting board") 
         });
-        reject("Error getting board") 
     });
    
 }
