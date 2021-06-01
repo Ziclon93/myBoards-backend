@@ -96,7 +96,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 boardList.forEach(boardData =>{
                     resultList.push(json(boardData));
                 });
-                res.send(list);
+                res.list;
             }, function (err) {
                 console.log(err);
                 res.statusCode = 500;
@@ -331,14 +331,14 @@ function getBoardData(board){
                         })
                     );
                 });
-                resolve({
+                resolve(json({
                     id: board.id,
                     title: board.title,
                     tags: promisesResults[0],
                     iconUrl: board.iconUrl,
                     valoration: promisesResults[1],
                     postList: postList
-                });
+                }));
             },function(err){
                 reject("Error getting board") 
             })
