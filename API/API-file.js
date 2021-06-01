@@ -11,17 +11,17 @@ const board = require('../models/board');
 const { json } = require('express');
 
 //Middleware to check API key
-async function asyncCheckAPIKey(req,res,next){
-    try{
-        var result = await ctl_user.getUserByAPIKey(req.headers['api-key'] );
-        if (result){
+async function asyncCheckAPIKey(req, res, next) {
+    try {
+        var result = await ctl_user.getUserByAPIKey(req.headers['api-key']);
+        if (result) {
             next();
         }
-        else{
+        else {
             res.send("La API key no es valida");
         }
     }
-    catch(err) {
+    catch (err) {
         res.send("La API key no es valida");
     }
 }
@@ -37,16 +37,16 @@ async function asyncCheckAPIKey(req,res,next){
  */
 router.post('/signup', function (req, res, next) {
     ctl_user.signUp(req.body['email'], req.body['username'], req.body['password'])
-        .then(function(success){
-            if(success){
+        .then(function (success) {
+            if (success) {
                 res.json({
                     success: true,
                 })
-            }else {
+            } else {
                 throw error;
             }
-        }).catch((err) =>{
-            console.log("Login Rejected",err);
+        }).catch((err) => {
+            console.log("Login Rejected", err);
             res.statusCode = 500;
             res.end("The user is already registered");
         });;
@@ -63,8 +63,8 @@ router.post('/signup', function (req, res, next) {
 router.post('/login', function (req, res, next) {
 
     ctl_user.userController_Login(req.body['username'], req.body['password'])
-        .then((success)=> {
-            if(success){
+        .then((success) => {
+            if (success) {
                 console.log(success.apiKey)
                 res.json({
                     apiKey: success.apiKey,
@@ -75,8 +75,8 @@ router.post('/login', function (req, res, next) {
                     success: false,
                 });
             }
-        }).catch((err) =>{
-            console.log("Login Rejected",err);
+        }).catch((err) => {
+            console.log("Login Rejected", err);
             res.statusCode = 500;
             res.end("User not valid");
         });
@@ -86,24 +86,58 @@ router.post('/login', function (req, res, next) {
 
 router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     ctl_board.getAllBoards().then(boards => {
-        if(boards){
-            var resultList= [];
+        if (boards) {
+            var resultList = [];
             var promiseList = [];
-            boards.forEach( board=>{
-                promiseList.push(getBoardData(board));
-            });
-            Promise.all(promiseList).then(boardList =>{
-                boardList.forEach(boardData =>{
-                    resultList.push(json(boardData));
+            boards.forEach(board => {
+                var dataPromises = [];
+                dataPromises.push(ctl_tag.getBoardTags(board));
+                dataPromises.push(ctl_valoration.getBoardValoration(board));
+                dataPromises.push(ctl_post.getBoardPosts(board));
+
+                Promise.all(dataPromises).then(promisesResults => {
+                    var postValorationPromises = [];
+                    promisesResults[2].forEach(post => {
+                        postValorationPromises.push(ctl_valoration.getPostValoration(post));
+                    })
+                    Promise.all(postValorationPromises).then(valorations => {
+                        var postList = [];
+                        valorations.forEach(valoration => {
+                            postList.push(
+                                json({
+                                    id: post.id,
+                                    x: post.x,
+                                    y: post.y,
+                                    rotation: post.rotation,
+                                    resourceUrl: post.resourceUrl,
+                                    valoration: valoration
+                                })
+                            );
+                        });
+                        resultList.push(json({
+                            id: board.id,
+                            title: board.title,
+                            tags: promisesResults[0],
+                            iconUrl: board.iconUrl,
+                            valoration: promisesResults[1],
+                            postList: postList
+                        }));
+                    }, function (err) {
+                        console.log("Get Board rejected", err);
+                        res.status(500).send("Internal server error");
+                    });
+                }, function (err) {
+                    console.log("Get Board rejected", err);
+                    res.status(500).send("Internal server error");
                 });
-                res.list;
+                res.resultList;
             }, function (err) {
                 console.log(err);
                 res.statusCode = 500;
                 res.end("Get Board rejected");
             });
         }
-        else{
+        else {
             res.json({
                 success: false,
             })
@@ -124,14 +158,14 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
  * text
  */
 router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
-    ctl_user.getUserByAPIKey(req.headers['api-key']).then(function(user) {
-        ctl_board.postBoard( 
-            user, 
-            req.body['title'], 
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(function (user) {
+        ctl_board.postBoard(
+            user,
+            req.body['title'],
             req.body['tags'],
             req.body['iconUrl']
-            )
-            .then(function(board){
+        )
+            .then(function (board) {
                 res.json({
                     id: board.id,
                     title: board.title,
@@ -140,8 +174,8 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
                     valoration: 0.0,
                     posts: []
                 })
-            }).catch((err) =>{
-                console.log("Post board",err);
+            }).catch((err) => {
+                console.log("Post board", err);
                 res.statusCode = 500;
                 res.end(err);
             });
@@ -150,9 +184,9 @@ router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
 
 router.post('/boards/follower', asyncCheckAPIKey, function (req, res, next) {
     ctl_board.getFollowerBoards(req.body['followed_name']).then(boards => {
-        if(boards){
-            var list= [];
-            for (i in boards){
+        if (boards) {
+            var list = [];
+            for (i in boards) {
                 var elem = {
                     id: boards[i].id,
                     description: boards[i].description,
@@ -167,7 +201,7 @@ router.post('/boards/follower', asyncCheckAPIKey, function (req, res, next) {
             };
             res.json(list);
         }
-        else{
+        else {
             res.json({
                 success: false,
             })
@@ -180,21 +214,21 @@ router.post('/boards/follower', asyncCheckAPIKey, function (req, res, next) {
 router.post('/follow', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_follow.postFollow(user, req.body['followed_name']).then(success => {
-            if(success){
+            if (success) {
                 res.json({
                     success: true,
                 })
-            }else{
+            } else {
                 res.json({
                     success: false,
                 })
             }
         }, function (err) {
-            console.log("Follow Rejected",err);
+            console.log("Follow Rejected", err);
             res.status(500).send("Internal server error");
         });
     }, function (err) {
-        console.log("Follow Rejected",err);
+        console.log("Follow Rejected", err);
         res.status(500).send("Internal server error");
     });
 });
@@ -203,29 +237,29 @@ router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_post.postPost(
             user,
-            req.body['board_id'], 
-            req.body['post_title'], 
-            req.body['post_description'], 
+            req.body['board_id'],
+            req.body['post_title'],
+            req.body['post_description'],
             req.body['post_url']
         ).then(success => {
-            if(success){
+            if (success) {
                 res.json({
                     success: true,
                 })
-            }else{
+            } else {
                 res.json({
                     success: false,
                 })
             }
         }, function (err) {
-            console.log("Follow Rejected",err);
+            console.log("Follow Rejected", err);
             res.status(500).send("Internal server error");
         });
-     }, function (err) {
-        console.log("Follow Rejected",err);
+    }, function (err) {
+        console.log("Follow Rejected", err);
         res.status(500).send("Internal server error");
     });
-   
+
 });
 
 router.post('/profile/iconUrl', asyncCheckAPIKey, function (req, res, next) {
@@ -235,12 +269,12 @@ router.post('/profile/iconUrl', asyncCheckAPIKey, function (req, res, next) {
                 iconUrl: new_iconUrl,
             })
         }, function (err) {
-            console.log("iconUrl update rejected",err);
+            console.log("iconUrl update rejected", err);
             res.statusCode = 500;
             res.end("iconUrl update rejected");
         });
     }, function (err) {
-        console.log("iconUrl update rejected",err);
+        console.log("iconUrl update rejected", err);
         res.statusCode = 500;
         res.end("iconUrl update rejected");
     });
@@ -249,104 +283,91 @@ router.post('/profile/iconUrl', asyncCheckAPIKey, function (req, res, next) {
 router.post('/users/category', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_user.setCategory(req.body['user_id'], req.body['category']).then(success => {
-            if(success){
+            if (success) {
                 res.json({
                     success: true,
                 })
-            }else{
+            } else {
                 res.json({
                     success: false,
                 })
             }
         }, function (err) {
-            console.log("Category edit Rejected",err);
+            console.log("Category edit Rejected", err);
             res.status(500).send("Internal server error");
         });
     }, function (err) {
-        console.log("Category edit Rejected",err);
+        console.log("Category edit Rejected", err);
         res.status(500).send("Internal server error");
     });
 });
 
 router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
-        ctl_valoration.getUserValoration(user).then(valoration =>{
+        ctl_valoration.getUserValoration(user).then(valoration => {
             res.json({
                 username: user.username,
                 iconUrl: user.iconUrl,
                 valoration: valoration,
             });
         }, function (err) {
-            console.log("Get profile Rejected",err);
+            console.log("Get profile Rejected", err);
             res.status(500).send("Internal server error");
         })
     }, function (err) {
-        console.log("Get profile Rejected",err);
+        console.log("Get profile Rejected", err);
         res.status(500).send("Internal server error");
     });
 });
 
 router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
-            ctl_board.getBoardById(req.query['boardId']).then(board =>{
-                getBoardData(board).then(boardData =>{
-                    res.json(boardData);
+        ctl_board.getBoardById(req.query['boardId']).then(board => {
+            var dataPromises = [];
+            dataPromises.push(ctl_tag.getBoardTags(board));
+            dataPromises.push(ctl_valoration.getBoardValoration(board));
+            dataPromises.push(ctl_post.getBoardPosts(board));
+
+            Promise.all(dataPromises).then(promisesResults => {
+                var postValorationPromises = [];
+                promisesResults[2].forEach(post => {
+                    postValorationPromises.push(ctl_valoration.getPostValoration(post));
+                })
+                Promise.all(postValorationPromises).then(valorations => {
+                    var postList = [];
+                    valorations.forEach(valoration => {
+                        postList.push(
+                            json({
+                                id: post.id,
+                                x: post.x,
+                                y: post.y,
+                                rotation: post.rotation,
+                                resourceUrl: post.resourceUrl,
+                                valoration: valoration
+                            })
+                        );
+                    });
+                    res.json({
+                        id: board.id,
+                        title: board.title,
+                        tags: promisesResults[0],
+                        iconUrl: board.iconUrl,
+                        valoration: promisesResults[1],
+                        postList: postList
+                    });
                 }, function (err) {
-                    console.log("Get Board rejected",err);
+                    console.log("Get Board rejected", err);
                     res.status(500).send("Internal server error");
                 });
             }, function (err) {
-                console.log("Get Board rejected",err);
+                console.log("Get Board rejected", err);
                 res.status(500).send("Internal server error");
-            })
-    }, function (err) {
-        console.log("Get Board rejected",err);
-        res.status(500).send("Internal server error");
-    });
-});
-
-function getBoardData(board){
-    return new Promise(function(resolve, reject){
-        var dataPromises = [];
-        dataPromises.push(ctl_tag.getBoardTags(board));
-        dataPromises.push(ctl_valoration.getBoardValoration(board));
-        dataPromises.push(ctl_post.getBoardPosts(board));
-    
-        Promise.all(dataPromises).then(promisesResults =>{
-            var postValorationPromises = [];
-            promisesResults[2].forEach(post =>{
-                postValorationPromises.push(ctl_valoration.getPostValoration(post));
-            })
-            Promise.all(postValorationPromises).then(valorations =>{
-                var postList = [];
-                valorations.forEach(valoration =>{
-                    postList.push(
-                        json({
-                            id: post.id,
-                            x: post.x,
-                            y: post.y,
-                            rotation: post.rotation,
-                            resourceUrl: post.resourceUrl,
-                            valoration:valoration
-                        })
-                    );
-                });
-                resolve(json({
-                    id: board.id,
-                    title: board.title,
-                    tags: promisesResults[0],
-                    iconUrl: board.iconUrl,
-                    valoration: promisesResults[1],
-                    postList: postList
-                }));
-            },function(err){
-                reject("Error getting board") 
-            })
+            });
         }, function (err) {
-            reject("Error getting board") 
+            console.log("Get Board rejected", err);
+            res.status(500).send("Internal server error");
         });
     });
-   
-}
+});
 
 module.exports = router;
