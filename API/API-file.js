@@ -101,7 +101,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 res.statusCode = 500;
                 res.end("Get Board rejected");
             });
-            res.send(json(list));
+            res.json(list);
         }
         else{
             res.json({
@@ -336,6 +336,7 @@ function getBoardData(board){
                         })
                     );
                 });
+                console.log("__________________________")
                 var result = json({
                     id: board.id,
                     title: board.title,
