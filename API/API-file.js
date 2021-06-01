@@ -90,7 +90,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
             var resultList = [];
             var promiseList = [];
             boards.forEach(board => {
-                promiseList(getBoardData(board));
+                promiseList.push(getBoardData(board));
             });
             Promise.all(promiseList).then(result=>{
                 res.json(resultList);
