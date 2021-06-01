@@ -6,76 +6,76 @@ var DataTypes = require('sequelize/lib/data-types');
 var ctl_board = require('../controllers/board_controller');
 var ctl_post = require('../controllers/post_controller');
 
-exports.getUserValoration = function(user){
-    
-    return new Promise(function(resolve,reject) {
+exports.getUserValoration = function (user) {
+
+    return new Promise(function (resolve, reject) {
         var valorationPromises = [];
 
-        ctl_post.getUserPosts(user).then(userPostList =>{
-            
+        ctl_post.getUserPosts(user).then(userPostList => {
+
             userPostList.forEach(post => {
                 valorationPromises.push(exports.getPostValoration(post));
-                
+
             });
-            ctl_board.getUserBoards(user).then(boardList =>{
+            ctl_board.getUserBoards(user).then(boardList => {
                 boardList.forEach(board => {
-                    valorationPromises.push( exports.getBoardValoration(board));
+                    valorationPromises.push(exports.getBoardValoration(board));
                 });
 
-                Promise.all(valorationPromises).then(valorationList =>{
+                Promise.all(valorationPromises).then(valorationList => {
                     finalValoration = 0;
-                    valorationList.forEach( valoration =>{
+                    valorationList.forEach(valoration => {
                         finalValoration += valoration;
                     });
 
                     resolve(finalValoration);
-                },function (err) {
+                }, function (err) {
                     reject(err);
                 })
-            },function (err) {
+            }, function (err) {
                 reject(err);
             })
-        },function (err) {
+        }, function (err) {
             reject(err);
         });
     });
 }
 
-exports.getBoardValoration = function(board){
-    
-    return new Promise(function(resolve,reject) {
+exports.getBoardValoration = function (board) {
 
-        ctl_post.getBoardPosts(board).then(postList =>{
+    return new Promise(function (resolve, reject) {
+
+        ctl_post.getBoardPosts(board).then(postList => {
             var postValorationPromises = [];
-            for(post in postList){
+            for (post in postList) {
                 postValorationPromises.push(getPostValoration(post))
             }
 
-            Promise.all(postValorationPromises).then(valorations =>{
+            Promise.all(postValorationPromises).then(valorations => {
                 var finalValoration = 0;
-                for(valoration in valorations){
-                    finalValoration +=valorations 
+                for (valoration in valorations) {
+                    finalValoration += valorations
                 }
                 resolve(finalValoration)
-            },function(err){
+            }, function (err) {
                 reject(err);
             })
-        },function(err){
+        }, function (err) {
             reject(err);
         })
     });
 }
 
-exports.getPostValoration = function(post){
-    return new Promise(function(resolve,reject) {
+exports.getPostValoration = function (post) {
+    return new Promise(function (resolve, reject) {
 
-        LikeModel.count({where:{postId: post.id}}).then(postLikes =>{
-            DislikeModel.count({where:{postId: post.id}}).then(postDislikes =>{
-                resolve((parseFloat(postLikes) - parseFloat(postDislikes))/100);
-            },function(err){
+        LikeModel.count({ where: { postId: post.id } }).then(postLikes => {
+            DislikeModel.count({ where: { postId: post.id } }).then(postDislikes => {
+                resolve((parseFloat(postLikes) - parseFloat(postDislikes)) / 100);
+            }, function (err) {
                 reject(err);
             })
-        },function(err){
+        }, function (err) {
             reject(err);
         });
 

@@ -3,20 +3,20 @@ var sequelize = sequelizeConnection.sequelize;
 var postModel = require('../models/post');
 var DataTypes = require('sequelize/lib/data-types');
 
-exports.postPost = function(user, b_id, p_title, p_description, p_url){
-    
-    return new Promise(function(resolve,reject) {
+exports.postPost = function (user, b_id, p_title, p_description, p_url) {
+
+    return new Promise(function (resolve, reject) {
         var PostModel = postModel(sequelize, DataTypes);
         var success = true;
-        
+
         PostModel.create({
             boardId: b_id,
             title: p_title,
             descripion: p_description,
             userId: user['id'],
-            x: getRandomIntInclusive(0,100),
-            y: getRandomIntInclusive(0,100),
-            rotation: getRandomIntInclusive(0,100),
+            x: getRandomIntInclusive(0, 100),
+            y: getRandomIntInclusive(0, 100),
+            rotation: getRandomIntInclusive(0, 100),
             resourceUrl: p_url
 
         }).then(post => {
@@ -24,36 +24,36 @@ exports.postPost = function(user, b_id, p_title, p_description, p_url){
         }, function (err) {
             console.log("Error ocurred: " + err);
             reject(err);
-        }); 
+        });
         resolve(success);
     });
 }
 
-exports.getUserPosts = function(user){
-    return new Promise(function(resolve, reject){
+exports.getUserPosts = function (user) {
+    return new Promise(function (resolve, reject) {
         var PostModel = postModel(sequelize, DataTypes);
 
-        PostModel.findAll({where:{userId: user.id}})
-         .then(function(data){
-           resolve(data);
-         }, function (err) {
-            console.log("Error ocurred: " + err);
-            reject(err);
-        });
+        PostModel.findAll({ where: { userId: user.id } })
+            .then(function (data) {
+                resolve(data);
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
+            });
     });
 };
 
-exports.getBoardPosts = function(board){
-    return new Promise(function(resolve, reject){
+exports.getBoardPosts = function (board) {
+    return new Promise(function (resolve, reject) {
         var PostModel = postModel(sequelize, DataTypes);
 
-        PostModel.findAll({where:{boardId: board.id}})
-         .then(function(data){
-           resolve(data);
-         }, function (err) {
-            console.log("Error ocurred: " + err);
-            reject(err);
-        });
+        PostModel.findAll({ where: { boardId: board.id } })
+            .then(function (data) {
+                resolve(data);
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
+            });
     });
 };
 
@@ -61,4 +61,4 @@ function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; // max & min both included 
-  }
+}
