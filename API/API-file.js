@@ -333,6 +333,7 @@ function getBoardData(board){
                     })
                 );
             });
+            console.log("____________:3")
             return json({
                 id: board.id,
                 title: board.title,
