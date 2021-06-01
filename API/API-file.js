@@ -126,11 +126,11 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                         console.log("Get Board rejected", err);
                         res.status(500).send("Internal server error");
                     });
+                    res.json(resultList);
                 }, function (err) {
                     console.log("Get Board rejected", err);
                     res.status(500).send("Internal server error");
                 });
-                res.json(resultList);
             }, function (err) {
                 console.log(err);
                 res.statusCode = 500;
