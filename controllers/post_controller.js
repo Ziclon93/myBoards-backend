@@ -48,7 +48,7 @@ exports.getBoardPosts = function (board) {
         console.log("_______________________________________4");
         PostModel.findAll({ where: { boardId: board.id } })
             .then(data => {
-                console.log("_______________________________________5");
+                console.log("_______________________________________5 " + board.id);
                 resolve(data);
             }, function (err) {
                 console.log("Error ocurred: " + err);
