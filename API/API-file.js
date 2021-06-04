@@ -347,9 +347,9 @@ function getBoardData(board) {
                 postValorationPromises.push( ctl_valoration.getPostValoration(post));
             })
             Promise.all(postValorationPromises).then(valorations => {
-                console.log("_______________________________________3" + valorations);
                 var postList = [];
                 valorations.forEach((tuple, index) => {
+                    console.log("_______________________________________3" + promisesResults[2][index].id );
                     postList.push(
                         json({
                             id: promisesResults[2][index].id,
