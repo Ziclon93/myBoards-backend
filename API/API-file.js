@@ -344,12 +344,13 @@ function getBoardData(board) {
         Promise.all(dataPromises).then(promisesResults => {
             var postValorationPromises = [];
             promisesResults[2].forEach(post => {
-                postValorationPromises.push([post, ctl_valoration.getPostValoration(post)]);
+                postValorationPromises.push( ctl_valoration.getPostValoration(post));
             })
             Promise.all(postValorationPromises).then(valorations => {
                 console.log("_______________________________________3" + valorations);
                 var postList = [];
-                valorations.forEach(tuple => {
+                var tuplesList = _.zip(promisesResults[2],valorations)
+                _.map(tuplesList, tuple => {
                     postList.push(
                         json({
                             id: tuple[0].id,
