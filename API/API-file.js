@@ -375,10 +375,10 @@ function getBoardData(board) {
                 });
 
             }, function (err) {
-                reject("Get Board rejected");
+                reject("Get Board rejected"+ err);
             });
         }, function (err) {
-            reject("Get Board rejected");
+            reject("Get Board rejected" + err);
         });
     });
 }
