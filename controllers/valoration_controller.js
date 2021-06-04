@@ -47,6 +47,7 @@ exports.getBoardValoration = function (board) {
 
         ctl_post.getBoardPosts(board).then(postList => {
             var postValorationPromises = [];
+            console.log("_______________________________________-1");
             for (post in postList) {
                 postValorationPromises.push(exports.getPostValoration(post))
             }
