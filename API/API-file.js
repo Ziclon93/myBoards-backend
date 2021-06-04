@@ -343,11 +343,13 @@ function getBoardData(board) {
         dataPromises.push(ctl_post.getBoardPosts(board));
         Promise.all(dataPromises).then(promisesResults => {
             var postValorationPromises = [];
+            console.log("_______________________________________1");
             promisesResults[2].forEach(post => {
                 postValorationPromises.push(ctl_valoration.getPostValoration(post));
             })
             Promise.all(postValorationPromises).then(valorations => {
                 var postList = [];
+                console.log("_______________________________________2");
                 valorations.forEach(valoration => {
                     postList.push(
                         json({
@@ -360,6 +362,7 @@ function getBoardData(board) {
                         })
                     );
                 });
+                console.log("_______________________________________3");
                 resolve({
                     id: board.id,
                     title: board.title,
