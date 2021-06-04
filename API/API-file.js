@@ -349,15 +349,14 @@ function getBoardData(board) {
             Promise.all(postValorationPromises).then(valorations => {
                 console.log("_______________________________________3" + valorations);
                 var postList = [];
-                var tuplesList = zip(promisesResults[2],valorations)
-                map(tuplesList, tuple => {
+                valorations.forEach((tuple, index) => {
                     postList.push(
                         json({
-                            id: tuple[0].id,
-                            x: tuple[0].x,
-                            y: tuple[0].y,
-                            rotation: tuple[0].rotation,
-                            resourceUrl: tuple[0].resourceUrl,
+                            id: promisesResults[2][index].id,
+                            x: promisesResults[2][index].x,
+                            y: promisesResults[2][index].y,
+                            rotation: promisesResults[2][index].rotation,
+                            resourceUrl: promisesResults[2][index].resourceUrl,
                             valoration: tuple[1]
                         })
                     );
