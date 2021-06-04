@@ -71,8 +71,11 @@ exports.getPostValoration = function (post) {
         var LikeModel = likeModel(sequelize, DataTypes);
         var DislikeModel = dislikeModel(sequelize, DataTypes);
 
+        console.log("_______________________________________0");
         LikeModel.count({ where: { postId: post.id } }).then(postLikes => {
+            console.log("_______________________________________1" + postLikes);
             DislikeModel.count({ where: { postId: post.id } }).then(postDislikes => {
+                console.log("_______________________________________2" + postDislikes);
                 resolve((parseFloat(postLikes) - parseFloat(postDislikes)) / 100);
             }, function (err) {
                 reject(err);
