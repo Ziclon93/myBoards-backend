@@ -343,9 +343,9 @@ function getBoardData(board) {
         dataPromises.push(ctl_tag.getBoardTags(board));
         console.log("_______________________________________2");
         dataPromises.push(ctl_valoration.getBoardValoration(board));
-        console.log("_______________________________________3");
         dataPromises.push(ctl_post.getBoardPosts(board));
         Promise.all(dataPromises).then(promisesResults => {
+            console.log("_______________________________________3");
             var postValorationPromises = [];
             promisesResults[2].forEach(post => {
                 postValorationPromises.push(ctl_valoration.getPostValoration(post));
