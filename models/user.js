@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       type: DataTypes.DATE
     },
-    password:{
+    password: {
       type: DataTypes.STRING
     }
   }, {

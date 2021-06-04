@@ -8,18 +8,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      boardId:{
+      boardId: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      postId:{
+      postId: {
         type: Sequelize.INTEGER
       },
       description: {
         type: Sequelize.STRING
       },
-      userId:{
+      userId: {
         allowNull: false,
         type: Sequelize.STRING
       },

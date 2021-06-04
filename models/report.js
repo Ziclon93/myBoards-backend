@@ -13,34 +13,34 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  report.init({ 
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      boardId:{
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      postId:{
-        type: DataTypes.INTEGER
-      },
-      description: {
-        type: DataTypes.STRING
-      },
-      userId:{
-        allowNull: false,
-        type: DataTypes.STRING
-      },
-      updatedAt: {
-        type: DataTypes.DATE
-      }
-    }, {
-      sequelize,
-      modelName: 'report',
+  report.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
+    boardId: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
+    postId: {
+      type: DataTypes.INTEGER
+    },
+    description: {
+      type: DataTypes.STRING
+    },
+    userId: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    updatedAt: {
+      type: DataTypes.DATE
+    }
+  }, {
+    sequelize,
+    modelName: 'report',
   });
   return report;
 };

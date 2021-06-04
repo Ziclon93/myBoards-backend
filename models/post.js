@@ -20,12 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    boardId:{
+    boardId: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    userId:{
+    userId: {
       allowNull: false,
       type: DataTypes.STRING
     },
