@@ -344,11 +344,13 @@ function getBoardData(board) {
         Promise.all(dataPromises).then(promisesResults => {
             var postValorationPromises = [];
             promisesResults[2].forEach(post => {
-                postValorationPromises.push( ctl_valoration.getPostValoration(post));
+                postValorationPromises.push(ctl_valoration.getPostValoration(post));
             })
             Promise.all(postValorationPromises).then(valorations => {
                 var postList = [];
                 valorations.forEach((tuple, index) => {
+
+                    console.log("_______________________________________-1" + promisesResults[2][index].id);
                     postList.push(
                         json({
                             id: promisesResults[2][index].id,
@@ -370,7 +372,7 @@ function getBoardData(board) {
                 });
 
             }, function (err) {
-                reject("Get Board rejected"+ err);
+                reject("Get Board rejected" + err);
             });
         }, function (err) {
             reject("Get Board rejected" + err);
