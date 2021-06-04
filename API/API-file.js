@@ -352,14 +352,14 @@ function getBoardData(board) {
 
                     console.log("_______________________________________-1" + promisesResults[2][index].id);
                     postList.push(
-                        json({
+                        {
                             id: promisesResults[2][index].id,
                             x: promisesResults[2][index].x,
                             y: promisesResults[2][index].y,
                             rotation: promisesResults[2][index].rotation,
                             resourceUrl: promisesResults[2][index].resourceUrl,
                             valoration: tuple[1]
-                        })
+                        }
                     );
                 });
                 resolve({
