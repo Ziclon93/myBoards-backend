@@ -3,29 +3,27 @@ var sequelize = sequelizeConnection.sequelize;
 var postModel = require('../models/post');
 var DataTypes = require('sequelize/lib/data-types');
 
-exports.postPost = function (user, b_id, p_title, p_description, p_url) {
+exports.postPost = function (user, b_id, p_resourceUrl) {
 
     return new Promise(function (resolve, reject) {
         var PostModel = postModel(sequelize, DataTypes);
-        var success = true;
 
         PostModel.create({
             boardId: b_id,
-            title: p_title,
-            descripion: p_description,
-            userId: user['id'],
-            x: getRandomIntInclusive(0, 100),
-            y: getRandomIntInclusive(0, 100),
-            rotation: getRandomIntInclusive(0, 100),
-            resourceUrl: p_url
-
+            userId: user.id,
+            resourceUrl: p_resourceUrl,
+            x: (getRandomIntInclusive(0, 100)) / 100,
+            y: (getRandomIntInclusive(0, 100)) / 100,
+            rotation: getRandomIntInclusive(0, 360),
         }).then(post => {
-            console.log("Post created");
+            resolve(post)
         }, function (err) {
             console.log("Error ocurred: " + err);
             reject(err);
         });
-        resolve(success);
+    }, function (err) {
+        console.log("Error ocurred: " + err);
+        reject(err);
     });
 }
 

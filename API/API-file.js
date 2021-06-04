@@ -18,11 +18,11 @@ async function asyncCheckAPIKey(req, res, next) {
             next();
         }
         else {
-            res.send("La API key no es valida");
+            res.send("No valid API key");
         }
     }
     catch (err) {
-        res.send("La API key no es valida");
+        res.send("No valid API key");
     }
 }
 
@@ -92,8 +92,8 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
             boards.forEach(board => {
                 promiseList.push(getBoardData(board));
             });
-            Promise.all(promiseList).then(boardDataList=>{
-                boardDataList.forEach(boardData =>{
+            Promise.all(promiseList).then(boardDataList => {
+                boardDataList.forEach(boardData => {
                     resultList.push(boardData);
                 });
                 res.json(resultList);
@@ -199,29 +199,31 @@ router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_post.postPost(
             user,
-            req.body['board_id'],
-            req.body['post_title'],
-            req.body['post_description'],
-            req.body['post_url']
-        ).then(success => {
-            if (success) {
+            req.body['boardId'],
+            req.body['resourceUrl']
+        ).then(post => {
+            ctl_valoration.getPostValoration(post).then(valoration => {
                 res.json({
-                    success: true,
+                    id: post.id,
+                    x: post.x,
+                    y: post.y,
+                    rotation: post.rotation,
+                    resourceUrl: post.resourceUrl,
+                    valoration: valoration
                 })
-            } else {
-                res.json({
-                    success: false,
-                })
+            }), function (err) {
+                console.log("Follow Rejected", err);
+                res.status(500).send("Internal server error");
             }
         }, function (err) {
             console.log("Follow Rejected", err);
             res.status(500).send("Internal server error");
         });
+
     }, function (err) {
         console.log("Follow Rejected", err);
-        res.status(500).send("Internal server error");
+        res.status(500).send("No valid API key");
     });
-
 });
 
 router.post('/profile/iconUrl', asyncCheckAPIKey, function (req, res, next) {
