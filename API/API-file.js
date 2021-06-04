@@ -342,24 +342,22 @@ function getBoardData(board) {
         dataPromises.push(ctl_valoration.getBoardValoration(board));
         dataPromises.push(ctl_post.getBoardPosts(board));
         Promise.all(dataPromises).then(promisesResults => {
-            console.log("_______________________________________3");
             var postValorationPromises = [];
             promisesResults[2].forEach(post => {
-                postValorationPromises.push(ctl_valoration.getPostValoration(post));
+                postValorationPromises.push([post, ctl_valoration.getPostValoration(post)]);
             })
-            console.log("_______________________________________4");
             Promise.all(postValorationPromises).then(valorations => {
-                console.log("_______________________________________5");
+                console.log("_______________________________________3" + valorations);
                 var postList = [];
-                valorations.forEach(valoration => {
+                valorations.forEach(tuple => {
                     postList.push(
                         json({
-                            id: post.id,
-                            x: post.x,
-                            y: post.y,
-                            rotation: post.rotation,
-                            resourceUrl: post.resourceUrl,
-                            valoration: valoration
+                            id: tuple[0].id,
+                            x: tuple[0].x,
+                            y: tuple[0].y,
+                            rotation: tuple[0].rotation,
+                            resourceUrl: tuple[0].resourceUrl,
+                            valoration: tuple[1]
                         })
                     );
                 });
