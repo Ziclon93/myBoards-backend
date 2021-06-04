@@ -52,7 +52,10 @@ exports.getBoardPosts = function (board) {
                 console.log("Error ocurred: " + err);
                 reject(err);
             });
-    });
+    }), function (err) {
+        console.log("Error ocurred: " + err);
+        reject(err);
+    };
 };
 
 function getRandomIntInclusive(min, max) {
