@@ -93,7 +93,6 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
                 promiseList.push(getBoardData(board));
             });
             Promise.all(promiseList).then(boardDataList => {
-                console.log("_______________________________________0");
                 boardDataList.forEach(boardData => {
                     resultList.push(boardData);
                 });
@@ -339,19 +338,18 @@ function getBoardData(board) {
     return new Promise(function (resolve, reject) {
 
         var dataPromises = [];
-        console.log("_______________________________________1");
         dataPromises.push(ctl_tag.getBoardTags(board));
-        console.log("_______________________________________2");
         dataPromises.push(ctl_valoration.getBoardValoration(board));
         dataPromises.push(ctl_post.getBoardPosts(board));
-        console.log("_______________________________________4 " );
         Promise.all(dataPromises).then(promisesResults => {
             console.log("_______________________________________3");
             var postValorationPromises = [];
             promisesResults[2].forEach(post => {
                 postValorationPromises.push(ctl_valoration.getPostValoration(post));
             })
+            console.log("_______________________________________4");
             Promise.all(postValorationPromises).then(valorations => {
+                console.log("_______________________________________5");
                 var postList = [];
                 valorations.forEach(valoration => {
                     postList.push(
