@@ -69,6 +69,7 @@ exports.getBoardValoration = function (board) {
 exports.getPostValoration = function (post) {
     return new Promise(function (resolve, reject) {
         var LikeModel = likeModel(sequelize, DataTypes);
+        var DislikeModel = dislikeModel(sequelize, DataTypes);
 
         LikeModel.count({ where: { postId: post.id } }).then(postLikes => {
             DislikeModel.count({ where: { postId: post.id } }).then(postDislikes => {
