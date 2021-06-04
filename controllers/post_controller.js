@@ -45,6 +45,7 @@ exports.getBoardPosts = function (board) {
     return new Promise(function (resolve, reject) {
         var PostModel = postModel(sequelize, DataTypes);
         PostModel.findAll({ where: { boardId: board.id } }).then(data => {
+            console.log("_______________________________________-1");
                 resolve(data);
             }, function (err) {
                 console.log("Error ocurred: " + err);
