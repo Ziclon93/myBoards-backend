@@ -309,7 +309,7 @@ function getBoardData(board) {
             })
             Promise.all(postValorationPromises).then(valorations => {
                 var postList = [];
-                valorations.forEach((tuple, index) => {
+                valorations.forEach((valoration, index) => {
                     postList.push(
                         {
                             id: promisesResults[2][index].id,
@@ -317,7 +317,7 @@ function getBoardData(board) {
                             y: promisesResults[2][index].y,
                             rotation: promisesResults[2][index].rotation,
                             resourceUrl: promisesResults[2][index].resourceUrl,
-                            valoration: tuple[1]
+                            valoration: valoration
                         }
                     );
                 });
