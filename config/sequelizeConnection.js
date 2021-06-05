@@ -5,7 +5,7 @@ const settings = require('./config.json');
 module.exports.sequelize = new Sequelize(settings.development.database, settings.development.username, settings.development.password, {
     host: settings.development.host,
     dialect: 'mysql',
-    operatorsAliases: 0,
+    operatorsAliases: false,
 
     pool: {
         max: 5,
