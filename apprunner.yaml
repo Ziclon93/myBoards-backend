@@ -5,4 +5,4 @@ build:
     build:
       - npm install --development                                  
 run:                              
-  command: node app.js
+  command: npm start
