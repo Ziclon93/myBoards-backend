@@ -1,9 +1,10 @@
 {
   "development": {
-    "username": "bd8f62b74dfdc0",
-    "password": "af3f466c",
-    "database": "heroku_eca19492a1952ef",
-    "host": "eu-cdbr-west-03.cleardb.net",
+    "username": "doadmin",
+    "password": "adxn20qsk50attgx ",
+    "database": "defaultdb",
+    "host": "db-mysql-ams3-73891-do-user-9342804-0.b.db.ondigitalocean.com",
+    "sslmode" : "REQUIRED",
     "port":"3306",
     "dialect": "mysql"
   },
