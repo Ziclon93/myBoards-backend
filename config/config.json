@@ -4,8 +4,7 @@
     "password": "adxn20qsk50attgx ",
     "database": "defaultdb",
     "host": "db-mysql-ams3-73891-do-user-9342804-0.b.db.ondigitalocean.com",
-    "sslmode" : "REQUIRED",
-    "port":"3306",
+    "port":"25060",
     "dialect": "mysql"
   },
   "test": {
