@@ -125,7 +125,7 @@ exports.getPostValoration = function (post) {
 
         LikeModel.count({ where: { postId: post.id } }).then(postLikes => {
             DislikeModel.count({ where: { postId: post.id } }).then(postDislikes => {
-                resolve((parseFloat(postLikes) - parseFloat(postDislikes)) / 100);
+                resolve(parseFloat(postLikes) - parseFloat(postDislikes));
             }, function (err) {
                 reject(err);
             })
