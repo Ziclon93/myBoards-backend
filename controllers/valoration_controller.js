@@ -7,8 +7,13 @@ var ctl_board = require('../controllers/board_controller');
 var ctl_post = require('../controllers/post_controller');
 
 exports.likePost = function (u_id, p_id) {
+    return new Promise(function (resolve, reject) {
     var LikeModel = likeModel(sequelize, DataTypes);
-    LikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } });
+    LikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } }).spread(function (tagResult, created) {
+        resolve(tagResult);
+    });
+});
+    
 }
 
 exports.dislikePost = function (u_id, p_id) {

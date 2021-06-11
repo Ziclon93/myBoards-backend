@@ -228,7 +228,12 @@ router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
 
 router.post('/board/post/like', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
-        ctl_valoration.likePost(user.id, req.body['postId'])
+        ctl_valoration.likePost(user.id, req.body['postId']).then(likeResult => {
+            res.status(200).send("Like Success")
+        }, function (err) {
+            console.log("Like Rejected", err);
+            res.status(500).send("Like rejected");
+        })
     }, function (err) {
         console.log("Like Rejected", err);
         res.status(500).send("No valid API key");
@@ -238,7 +243,12 @@ router.post('/board/post/like', asyncCheckAPIKey, function (req, res, next) {
 
 router.post('/board/post/dislike', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
-        ctl_valoration.dislikePost(user.id, req.body['postId'])
+        ctl_valoration.dislikePost(user.id, req.body['postId']).then(dislikeResult => {
+            res.status(200).send("Dislike success")
+        }, function (err) {
+            console.log("Dislike Rejected", err);
+            res.status(500).send("Dislike rejected");
+        })
     }, function (err) {
         console.log("Like Rejected", err);
         res.status(500).send("No valid API key");
@@ -305,7 +315,7 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
 
 router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
     ctl_board.getBoardById(req.query['boardId']).then(board => {
-        getBoardData(board).then(boardData =>{
+        getBoardData(board).then(boardData => {
             res.json(boardData);
         });
     }, function (err) {
