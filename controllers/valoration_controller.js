@@ -8,17 +8,23 @@ var ctl_post = require('../controllers/post_controller');
 
 exports.likePost = function (u_id, p_id) {
     return new Promise(function (resolve, reject) {
-    var LikeModel = likeModel(sequelize, DataTypes);
-    LikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } }).spread(function (tagResult, created) {
-        resolve(tagResult);
+        var LikeModel = likeModel(sequelize, DataTypes);
+        LikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } })
+            .spread(function (likeResult, created) {
+                resolve(likeResult);
+            });
     });
-});
-    
+
 }
 
 exports.dislikePost = function (u_id, p_id) {
-    var DislikeModel = dislikeModel(sequelize, DataTypes);
-    DislikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } });
+    return new Promise(function (resolve, reject) {
+        var DislikeModel = dislikeModel(sequelize, DataTypes);
+        DislikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } })
+            .spread(function (dislikeResult, created) {
+                resolve(dislikeResult);
+            });
+    });
 }
 
 exports.getUserValoration = function (user) {
