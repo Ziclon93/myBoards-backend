@@ -6,6 +6,16 @@ var DataTypes = require('sequelize/lib/data-types');
 var ctl_board = require('../controllers/board_controller');
 var ctl_post = require('../controllers/post_controller');
 
+exports.likePost = function (u_id, p_id) {
+    var LikeModel = likeModel(sequelize, DataTypes);
+    LikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } });
+}
+
+exports.dislikePost = function (u_id, p_id) {
+    var DislikeModel = dislikeModel(sequelize, DataTypes);
+    DislikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } });
+}
+
 exports.getUserValoration = function (user) {
 
     return new Promise(function (resolve, reject) {
@@ -47,14 +57,14 @@ exports.getBoardValoration = function (board) {
 
         ctl_post.getBoardPosts(board).then(postList => {
             var postValorationPromises = [];
-            postList.forEach(post =>{
+            postList.forEach(post => {
                 postValorationPromises.push(exports.getPostValoration(post));
             });
-        
+
 
             Promise.all(postValorationPromises).then(valorations => {
                 var finalValoration = 0;
-                valorations.forEach(valoration =>{
+                valorations.forEach(valoration => {
                     finalValoration += valoration;
                 });
                 resolve(finalValoration)
