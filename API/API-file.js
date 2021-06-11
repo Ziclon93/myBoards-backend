@@ -355,7 +355,7 @@ function getBoardData(user, board) {
                 postLikeCodePromises.push(ctl_valoration.getUserLikeCode(user,post))
             })
             Promise.all(postValorationPromises).then(valorations => {
-                Promise.all(postLikeCodePromises).then(likeoCdes => {
+                Promise.all(postLikeCodePromises).then(likeCodes => {
                     var postList = [];
                     valorations.forEach((valoration, index) => {
                         postList.push(
@@ -366,7 +366,7 @@ function getBoardData(user, board) {
                                 rotation: promisesResults[2][index].rotation,
                                 resourceUrl: promisesResults[2][index].resourceUrl,
                                 valoration: valoration,
-                                userLikeCode: likeoCdes,
+                                userLikeCode: likeCodes[index],
                             }
                         );
                     });
