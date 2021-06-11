@@ -85,29 +85,34 @@ router.post('/login', function (req, res, next) {
 
 
 router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
-    ctl_board.getAllBoards().then(boards => {
-        if (boards) {
-            var resultList = [];
-            var promiseList = [];
-            boards.forEach(board => {
-                promiseList.push(getBoardData(board));
-            });
-            Promise.all(promiseList).then(boardDataList => {
-                boardDataList.forEach(boardData => {
-                    resultList.push(boardData);
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(function (user) {
+        ctl_board.getAllBoards().then(boards => {
+            if (boards) {
+                var resultList = [];
+                var promiseList = [];
+                boards.forEach(board => {
+                    promiseList.push(getBoardData(user, board));
                 });
-                res.json(resultList);
-            })
-        }
-        else {
-            res.json({
-                success: false,
-            })
-        }
+                Promise.all(promiseList).then(boardDataList => {
+                    boardDataList.forEach(boardData => {
+                        resultList.push(boardData);
+                    });
+                    res.json(resultList);
+                })
+            }
+            else {
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log(err);
+            res.statusCode = 500;
+            res.end("Get Board rejected");
+        });
     }, function (err) {
-        console.log(err);
-        res.statusCode = 500;
-        res.end("Get Board rejected");
+        console.log("Create post Rejected", err);
+        res.status(500).send("No valid API key");
     });
 });
 
@@ -203,25 +208,31 @@ router.post('/board/post', asyncCheckAPIKey, function (req, res, next) {
             req.body['resourceUrl']
         ).then(post => {
             ctl_valoration.getPostValoration(post).then(valoration => {
-                res.json({
-                    id: post.id,
-                    x: post.x,
-                    y: post.y,
-                    rotation: post.rotation,
-                    resourceUrl: post.resourceUrl,
-                    valoration: valoration
-                })
+                ctl_valoration.getUserLikeCode(user, post).then(likeCode => {
+                    res.json({
+                        id: post.id,
+                        x: post.x,
+                        y: post.y,
+                        rotation: post.rotation,
+                        resourceUrl: post.resourceUrl,
+                        valoration: valoration,
+                        userLikeCode: likeCode,
+                    })
+                }), function (err) {
+                    console.log("Create post Rejected", err);
+                    res.status(500).send("Create post Rejected", err);
+                }
             }), function (err) {
-                console.log("Follow Rejected", err);
-                res.status(500).send("Internal server error");
+                console.log("Create post Rejected", err);
+                res.status(500).send("Create post Rejected", err);
             }
         }, function (err) {
-            console.log("Follow Rejected", err);
-            res.status(500).send("Internal server error");
+            console.log("Create post Rejected", err);
+            res.status(500).send("Create post Rejected", err);
         });
 
     }, function (err) {
-        console.log("Follow Rejected", err);
+        console.log("Create post Rejected", err);
         res.status(500).send("No valid API key");
     });
 });
@@ -314,17 +325,22 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
 });
 
 router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
-    ctl_board.getBoardById(req.query['boardId']).then(board => {
-        getBoardData(board).then(boardData => {
-            res.json(boardData);
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+        ctl_board.getBoardById(req.query['boardId']).then(board => {
+            getBoardData(user, board).then(boardData => {
+                res.json(boardData);
+            });
+        }, function (err) {
+            console.log("Get Board rejected", err);
+            res.status(500).send("Internal server error");
         });
     }, function (err) {
-        console.log("Get Board rejected", err);
+        console.log("Get profile Rejected", err);
         res.status(500).send("Internal server error");
     });
 });
 
-function getBoardData(board) {
+function getBoardData(user, board) {
     return new Promise(function (resolve, reject) {
 
         var dataPromises = [];
@@ -333,32 +349,38 @@ function getBoardData(board) {
         dataPromises.push(ctl_post.getBoardPosts(board));
         Promise.all(dataPromises).then(promisesResults => {
             var postValorationPromises = [];
+            var postLikeCodePromises = [];
             promisesResults[2].forEach(post => {
                 postValorationPromises.push(ctl_valoration.getPostValoration(post));
+                postLikeCodePromises.push(ctl_valoration.getUserLikeCode(user))
             })
             Promise.all(postValorationPromises).then(valorations => {
-                var postList = [];
-                valorations.forEach((valoration, index) => {
-                    postList.push(
-                        {
-                            id: promisesResults[2][index].id,
-                            x: promisesResults[2][index].x,
-                            y: promisesResults[2][index].y,
-                            rotation: promisesResults[2][index].rotation,
-                            resourceUrl: promisesResults[2][index].resourceUrl,
-                            valoration: valoration
-                        }
-                    );
+                Promise.all(postLikeCodePromises).then(likeoCdes => {
+                    var postList = [];
+                    valorations.forEach((valoration, index) => {
+                        postList.push(
+                            {
+                                id: promisesResults[2][index].id,
+                                x: promisesResults[2][index].x,
+                                y: promisesResults[2][index].y,
+                                rotation: promisesResults[2][index].rotation,
+                                resourceUrl: promisesResults[2][index].resourceUrl,
+                                valoration: valoration,
+                                userLikeCode: likeoCdes[index],
+                            }
+                        );
+                    });
+                    resolve({
+                        id: board.id,
+                        title: board.title,
+                        tags: promisesResults[0],
+                        iconUrl: board.iconUrl,
+                        valoration: promisesResults[1],
+                        postList: postList
+                    });
+                }, function (err) {
+                    reject("Get Board rejected" + err);
                 });
-                resolve({
-                    id: board.id,
-                    title: board.title,
-                    tags: promisesResults[0],
-                    iconUrl: board.iconUrl,
-                    valoration: promisesResults[1],
-                    postList: postList
-                });
-
             }, function (err) {
                 reject("Get Board rejected" + err);
             });

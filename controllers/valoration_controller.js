@@ -12,6 +12,8 @@ exports.likePost = function (u_id, p_id) {
         LikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } })
             .spread(function (likeResult, created) {
                 resolve(likeResult);
+            }, function (err) {
+                reject(err);
             });
     });
 
@@ -21,8 +23,36 @@ exports.dislikePost = function (u_id, p_id) {
     return new Promise(function (resolve, reject) {
         var DislikeModel = dislikeModel(sequelize, DataTypes);
         DislikeModel.findOrCreate({ where: { userId: u_id, postId: p_id } })
-            .spread(function (dislikeResult, created) {
+            .spread(function (dislikeResult) {
                 resolve(dislikeResult);
+            }, function (err) {
+                reject(err);
+            });
+    });
+}
+
+exports.getUserLikeCode = function(user, post){
+    return new Promise(function (resolve, reject) {
+        var DislikeModel = dislikeModel(sequelize, DataTypes);
+        DislikeModel.findOne({ where: { userId: user.id, postId: post.id } })
+            .then(dislike => {
+                if(dislike){
+                    resolve(2);
+                }else{
+                    var LikeModel = likeModel(sequelize, DataTypes);
+                    LikeModel.findOne({ where: { userId:user.id, postId: post.id } })
+                    .then(like => {
+                        if(like){
+                            resolve(1);
+                        }else{
+                            resolve(0);
+                        }
+                    }, function (err) {
+                        reject(err);
+                    });
+                }
+            }, function (err) {
+                reject(err);
             });
     });
 }
