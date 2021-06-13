@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "sql4417356",
-    "password": "Wj7mVgjKAE",
-    "database": "sql4417356",
-    "host": "sql4.freemysqlhosting.net",
+    "username": "epiz_28870552",
+    "password": "xVj3mYdgYff",
+    "database": "epiz_28870552_myBoards",
+    "host": "sql213.epizy.com",
     "port":"3306",
     "dialect": "mysql"
   },
