@@ -124,7 +124,7 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
  * title
  * text
  */
-router.post('/createBoard', asyncCheckAPIKey, function (req, res, next) {
+router.post('/board', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(function (user) {
         ctl_board.postBoard(
             user,
@@ -324,7 +324,7 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
-router.get('/getBoard', asyncCheckAPIKey, function (req, res, next) {
+router.get('/board', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_board.getBoardById(req.query['boardId']).then(board => {
             getBoardData(user, board).then(boardData => {
