@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "epiz_28870552",
-    "password": "xVj3mYdgYff",
-    "database": "epiz_28870552_myBoards",
-    "host": "sql213.epizy.com",
+    "username": "VEs5uoYobt",
+    "password": "PItQvnZ0lU",
+    "database": "VEs5uoYobt",
+    "host": "remotemysql.com",
     "port":"3306",
     "dialect": "mysql"
   },
