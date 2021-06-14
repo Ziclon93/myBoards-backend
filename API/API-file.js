@@ -37,10 +37,10 @@ async function asyncCheckAPIKey(req, res, next) {
  */
 router.post('/signup', function (req, res, next) {
     ctl_user.signUp(req.body['email'], req.body['username'], req.body['password'])
-        .then(function (success) {
-            if (success) {
+        .then(user => {
+            if (user) {
                 res.json({
-                    success: true,
+                    apiKey: user.apiKey,
                 })
             } else {
                 throw error;
@@ -63,17 +63,13 @@ router.post('/signup', function (req, res, next) {
 router.post('/login', function (req, res, next) {
 
     ctl_user.userController_Login(req.body['username'], req.body['password'])
-        .then((success) => {
-            if (success) {
-                console.log(success.apiKey)
+        .then(user => {
+            if (user) {
                 res.json({
-                    apiKey: success.apiKey,
-                    success: true,
+                    apiKey: user.apiKey,
                 });
             } else {
-                res.json({
-                    success: false,
-                });
+                throw Error("User Not valid")
             }
         }).catch((err) => {
             console.log("Login Rejected", err);

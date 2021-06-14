@@ -17,7 +17,7 @@ exports.signUp = function (u_email, u_name, u_pass) {
         UserModel.findOne({ where: { username: u_name, email: u_email } })
             .then(function (user) {
                 if (user) {
-                    resolve(false);
+                    reject("User is not valid");
                 }
                 else {
                     bcrypt.genSalt(saltRounds, function (err, salt) {
@@ -32,12 +32,10 @@ exports.signUp = function (u_email, u_name, u_pass) {
                                 category: 1,
                                 iconUrl: "",
                             }).then(user => {
-                                console.log("User created and added to sitexml");
+                                resolve(user);
                             });
                         });
                     });
-
-                    resolve(true);
                 }
             }, function (err) {
                 reject("Mysql error, check your query" + err);
