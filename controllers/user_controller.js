@@ -96,7 +96,7 @@ exports.userController_Login = function (u_name, u_pass) {
                 if (!user) {
                     reject("User not found");
                 }
-                bcrypt.compare(u_pass, user.password, result =>{
+                bcrypt.compare(u_pass, user.password, (err,result) =>{
                         if (result) {
                             resolve(user);
                         } else {
