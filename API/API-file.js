@@ -280,6 +280,38 @@ router.post('/profile/iconUrl', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
+router.post('/profile/boards', asyncCheckAPIKey, function (req, res, next) {
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(function (user) {
+        ctl_board.getUserBoards(user).then(boards => {
+            if (boards) {
+                var resultList = [];
+                var promiseList = [];
+                boards.forEach(board => {
+                    promiseList.push(getBoardData(user, board));
+                });
+                Promise.all(promiseList).then(boardDataList => {
+                    boardDataList.forEach(boardData => {
+                        resultList.push(boardData);
+                    });
+                    res.json(resultList);
+                })
+            }
+            else {
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log(err);
+            res.statusCode = 500;
+            res.end("Get Board rejected");
+        });
+    }, function (err) {
+        console.log("Create post Rejected", err);
+        res.status(500).send("No valid API key");
+    });
+});
+
 router.post('/users/category', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_user.setCategory(req.body['user_id'], req.body['category']).then(success => {
