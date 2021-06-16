@@ -280,7 +280,7 @@ router.post('/profile/iconUrl', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
-router.post('/profile/boards', asyncCheckAPIKey, function (req, res, next) {
+router.get('/profile/boards', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(function (user) {
         ctl_board.getUserBoards(user).then(boards => {
             if (boards) {
