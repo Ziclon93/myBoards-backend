@@ -93,16 +93,18 @@ exports.userController_Login = function (u_name, u_pass) {
 
         UserModel.findOne({ where: { username: u_name } })
             .then((user) => {
-                if (!user) {
-                    reject("User not found");
-                }
-                bcrypt.compare(u_pass, user.password, (err,result) =>{
+                if (user) {
+                    bcrypt.compare(u_pass, user.password, (err, result) => {
                         if (result) {
                             resolve(user);
                         } else {
                             resolve(null);
                         }
-                });
+                    });
+                } else {
+                    reject("User not found");
+                }
+
             }).catch(function (err) {
                 console.log("Error ocurred: " + err);
                 reject(err);
