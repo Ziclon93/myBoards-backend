@@ -104,7 +104,7 @@ exports.getMostUsedTagsBoards = function () {
                                     boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
                                 })
                                 Promise.all(boardsPromises).then(boardList =>{
-                                    boardsLists.add(boardList);
+                                    boardsLists.push(boardList);
                                     resolve(boardsLists);
                                 });
                             }, function (err) {
