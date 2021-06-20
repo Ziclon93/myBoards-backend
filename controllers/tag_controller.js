@@ -70,40 +70,42 @@ exports.getMostUsedTagsBoards = function () {
             })
             Promise.all(tagListQueries).then(tagListQueriesResult => {
                 tagListQueriesResult.forEach((count, index) => {
-                    touples.push([index,count]);
+                    touples.push([index, count]);
                 })
-                touples.sort((first,second) =>{return  second[1] - first[1]});
-                if(touples.length == 0){
+                touples.sort((first, second) => { return second[1] - first[1] });
+                if (touples.length == 0) {
                     resolve([])
-                }else if(touples.length == 1){
-                    BoardTagModel.findAll({where: {tagId: tagList[0].id}}).then( boardTags=>{
+                } else if (touples.length == 1) {
+                    BoardTagModel.findAll({ where: { tagId: tagList[0].id } }).then(boardTags => {
                         var boardsPromises = [];
-                        boardTags.forEach(boardTag =>{
+                        boardTags.forEach(boardTag => {
                             boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
                         })
 
-                        Promise.all(boardsPromises).then(boardList =>{
+                        Promise.all(boardsPromises).then(boardList => {
                             resolve([boardList]);
                         }, function (err) {
                             reject("Mysql error, check your query" + err);
                         });
                     });
-                }else{
+                } else {
                     console.log(tagList);
-                    BoardTagModel.findAll({where: {tagId: tagList[0].id}}).then( boardTags1=>{
+                    BoardTagModel.findAll({ where: { tagId: tagList[0].id } }).then(boardTags1 => {
                         var boardsLists = [];
                         var boardsPromises = [];
-                        boardTags1.forEach(boardTag1 =>{
+                        boardTags1.forEach(boardTag1 => {
+                            console.log("____________________________________");
+                            console.log(boardTag1.boardId);
                             boardsPromises.push(ctl_board.getBoardById(boardTag1.boardId));
                         })
-                        Promise.all(boardsPromises).then(boardList =>{
+                        Promise.all(boardsPromises).then(boardList => {
                             boardsLists.push([boardList]);
-                            BoardTagModel.findAll({where: {tagId: tagList[1].id}}).then( boardTags2=>{
+                            BoardTagModel.findAll({ where: { tagId: tagList[1].id } }).then(boardTags2 => {
                                 var boardsPromises = [];
-                                boardTags2.forEach(boardTag2 =>{
+                                boardTags2.forEach(boardTag2 => {
                                     boardsPromises.push(ctl_board.getBoardById(boardTag2.boardId));
                                 })
-                                Promise.all(boardsPromises).then(boardList =>{
+                                Promise.all(boardsPromises).then(boardList => {
                                     boardsLists.push(boardList);
                                     resolve(boardsLists);
                                 });
