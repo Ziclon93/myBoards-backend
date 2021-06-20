@@ -336,10 +336,12 @@ router.get('/tags/boards', asyncCheckAPIKey, function (req, res, next) {
             });
             Promise.all(listBoardPromises).then(boardLists => {
 
-                var listBoardDataPromises = []
-                boardLists.forEach(board => {
-                    listBoardDataPromises.push(getBoardData(user, board));
+                var listBoardDataPromises = [];
+                boardLists.forEach(boardList => {
+                    listBoardDataPromises.push(getListBoardData(user, boardList));
                 });
+
+
                 Promise.all(listBoardDataPromises).then(boardDataLists => {
                     var finalList = []
                     tags.forEach((tag, index) => {
@@ -382,6 +384,22 @@ router.get('/board', asyncCheckAPIKey, function (req, res, next) {
         res.status(500).send("Internal server error");
     });
 });
+
+function getListBoardData(user, boardList) {
+    
+    return new Promise(function (resolve, reject) {
+        var listBoardDataPromises = [];
+        boardList.forEach(board =>{
+            listBoardDataPromises.push(getBoardData(user,board));
+        })
+
+        Promise.all(listBoardDataPromises).then( listBoardData =>{
+            resolve(listBoardData);
+        }, function (err) {
+            reject("Get Board rejected" + err);
+        });
+    });
+};
 
 function getBoardData(user, board) {
     return new Promise(function (resolve, reject) {
