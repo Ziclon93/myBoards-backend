@@ -58,11 +58,9 @@ exports.getMostUsedTags = function () {
     return new Promise(function (resolve, reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         BoardTagModel.max('tagId').then(list => {
-                list.forEach(boardTag => {
                     console.log("____________________________");
-                    console.log(boardTag.tagId);
+                    console.log(list.tagId);
                     console.log("____________________________");
-                })
             }, function (err) {
                 reject("Mysql error, check your query" + err);
             });
