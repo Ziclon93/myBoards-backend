@@ -77,10 +77,10 @@ exports.getMostUsedTagsBoards = function () {
                     resolve([])
                 } else {
                     var getTagBoardsPromise = [];
-                    console.log("_________________"+ touples[0].id+"___________________");
+                    console.log("_________________"+ touples[0][0]+"___________________");
                     getTagBoardsPromise.push(geBoardsOfTag(touples[0][0].id));
                     if (touples.length >= 2){
-                        console.log("_________________"+ touples[1].id+"___________________");
+                        console.log("_________________"+ touples[1][0]+"___________________");
                         getTagBoardsPromise.push(geBoardsOfTag(touples[1][0].id));
                     }
 
