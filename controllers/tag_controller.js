@@ -58,20 +58,19 @@ exports.getMostUsedTags = function () {
     return new Promise(function (resolve, reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         BoardTagModel.findAll({
-            attributes: ['tagId',[sequelize.fn('count', sequelize.col('tagId')), 'count']],
+            attributes: ['tagId', [sequelize.fn('count', sequelize.col('tagId')), 'count']],
             group: ['board_tag.boardId'],
             raw: true,
             order: sequelize.literal('count DESC'),
         }).then(list => {
-                console.log("____________________________");
-                console.log(list);
-                console.log("____________________________");
+            console.log("____________________________");
+            console.log(list);
+            console.log("____________________________");
             resolve(list);
 
         }, function (err) {
             reject("Mysql error, check your query" + err);
         });
-        resolve(true);
     });
 }
 
