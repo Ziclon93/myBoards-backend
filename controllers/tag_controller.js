@@ -100,7 +100,9 @@ exports.getMostUsedTagsBoards = function () {
                             boardsLists.push([boardList]);
                             BoardTagModel.findAll({where: {tagId: tagList[0]}}).then( boardTags=>{
                                 var boardsPromises = [];
-                                boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                                boardTags.forEach(boardTag =>{
+                                    boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                                })
                                 Promise.all(boardsPromises).then(boardList =>{
                                     boardsLists.add(boardList);
                                     resolve(boardsLists);
