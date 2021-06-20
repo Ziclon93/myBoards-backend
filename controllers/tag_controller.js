@@ -70,9 +70,9 @@ exports.getMostUsedTags = function () {
             })
             Promise.all(tagListQueries).then(tagListQueriesResult => {
                 tagListQueriesResult.forEach((count, index) => {
-                    touples.push([intex,count])
+                    touples.push([index,count]);
                 })
-                touples = sorted(touples, key = lambda(x[1]))
+                touples = sorted(touples, key = lambda(x[1]));
                 touples.forEach((index, count) =>{
                     print("______________________________");
                     print("index " + index + " count: " + count);
