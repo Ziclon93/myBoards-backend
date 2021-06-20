@@ -59,7 +59,7 @@ exports.getMostUsedTags = function () {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         BoardTagModel.findAll({
             attributes: ['tagId',[sequelize.fn('count', sequelize.col('tagId')), 'count']],
-            group: ['BoardTag.tagId'],
+            group: ['board_tags.tagId'],
             raw: true,
             order: sequelize.literal('count DESC'),
         }).then(list => {
