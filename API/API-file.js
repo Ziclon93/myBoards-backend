@@ -329,46 +329,31 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
 router.get('/test', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
 
-        ctl_tag.getMostUsedTagsBoards().then(boardsLists => {
-            var boardsListsResult = [];
-            if (boardsLists.length == 0) {
-                res.json(boardsListsResult);
-            } else if (boardsLists.length >= 1) {
-                var boardsPromises = [];
-                boardsLists[0].forEach(board => {
-                    boardsPromises.push(getBoardData(user, board));
+        ctl_tag.getMostUsedTags().then(tags =>{
+            var listBoardPromises = []
+            tags.forEach(tag =>{
+                listBoardPromises.push(ctl_board.getBoardsOfTag(tag));
+            });
+            Promise.all(listBoardPromises).then( boardLists =>{
+
+                var finalList = []
+                tags.forEach((tag,index) =>{
+                    finalList.push({
+                        tagName: tag.tagName,
+                        boardList: boardLists[index],
+                    });
                 });
+                res.json(finalList);
 
-                Promise.all(boardsPromises).then(boardDataResults => {
-                    boardsListsResult.push(boardDataResults);
-                    if (boardsLists.length >= 2) {
-                        boardsPromises = [];
-                        boardsLists[0].forEach(board => {
-                            boardsPromises.push(getBoardData(user, board));
-                        });
 
-                        Promise.all(boardsPromises).then(boardDataResults => {
-                            boardsListsResult.push(boardDataResults);
-                            res.json(boardsListsResult);
-                        }, function (err) {
-                            console.log("Get Board rejected", err);
-                            res.status(500).send("Internal server error");
-                        });
-
-                    } else {
-                        res.json(boardsListsResult);
-                    }
-                }, function (err) {
-                    console.log("Get Board rejected", err);
-                    res.status(500).send("Internal server error");
-                });
-            }
-
+            }, function (err) {
+                console.log("Get Board rejected", err);
+                res.status(500).send("Internal server error");
+            });
         }, function (err) {
-            console.log("Get Most used tags Rejected", err);
+            console.log("Get Board rejected", err);
             res.status(500).send("Internal server error");
         });
-
     }, function (err) {
         console.log("Create post Rejected", err);
         res.status(500).send("No valid API key");

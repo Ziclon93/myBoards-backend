@@ -53,6 +53,40 @@ exports.getBoardTags = function (board) {
 
     });
 };
+exports.getMostUsedTags() = function () {
+    return new Promise(function (resolve, reject) {
+        var BoardTagModel = boardTagModel(sequelize, DataTypes);
+        var TagModel = tagModel(sequelize, DataTypes);
+
+        TagModel.findAll().then(tagList => {
+            var tagListQueries = [];
+            var touples = [];
+            var resultList = [];
+
+            tagList.forEach(tag => {
+                tagListQueries.push(BoardTagModel.count({ where: { tagId: tag.id } }))
+            })
+            Promise.all(tagListQueries).then(tagListQueriesResult => {
+                tagListQueriesResult.forEach((count, index) => {
+                    touples.push([index, count]);
+                })
+                touples.sort((first, second) => { return second[1] - first[1] });
+                resul
+                if(touples.length >=1){
+                    resultList.push(tagList[touples[0][0]])
+                    if(touples.length >=2){
+                        resultList.push(tagList[touples[1][0]])
+                    }
+                }
+                resolve(resultList)
+            }, function (err) {
+                reject("Mysql error, check your query" + err);
+            });
+        }, function (err) {
+            reject("Mysql error, check your query" + err);
+        });
+    });
+};
 
 exports.getMostUsedTagsBoards = function () {
 
@@ -77,18 +111,18 @@ exports.getMostUsedTagsBoards = function () {
                     resolve([])
                 } else {
                     var getTagBoardsPromise = [];
-                    console.log("_________________"+ tagList[touples[0][0]].id+"___________________");
+                    console.log("_________________" + tagList[touples[0][0]].id + "___________________");
                     getTagBoardsPromise.push(geBoardsOfTag(tagList[touples[0][0]].id));
-                    if (touples.length >= 2){
-                        console.log("_________________"+ tagList[touples[1][0]].id+"___________________");
+                    if (touples.length >= 2) {
+                        console.log("_________________" + tagList[touples[1][0]].id + "___________________");
                         getTagBoardsPromise.push(geBoardsOfTag(tagList[touples[1][0]].id));
                     }
 
                     Promise.all(getTagBoardsPromise).then(boardListsResult => {
-                        resolve([boardListsResult[0],boardListsResult[1]]);
+                        resolve([boardListsResult[0], boardListsResult[1]]);
                     }, function (err) {
                         reject("Mysql error, check your query" + err);
-                    });  
+                    });
                 }
             }, function (err) {
                 reject("Mysql error, check your query" + err);

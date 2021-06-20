@@ -1,6 +1,7 @@
 var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var boardModel = require('../models/board');
+var boardTagModel = require('../models/board_tag');
 var DataTypes = require('sequelize/lib/data-types');
 var ctl_tag = require('../controllers/tag_controller');
 var ctl_user = require('../controllers/user_controller');
@@ -45,6 +46,26 @@ exports.getBoardById = function (b_id) {
             });
     });
 };
+
+exports.getBoardsOfTag = function(tag_id) {
+    return new Promise(function (resolve, reject) {
+        var BoardTagModel = boardTagModel(sequelize, DataTypes);
+
+        BoardTagModel.findAll({ where: { tagId: tag_id } }).then(boardTags => {
+            var boardsPromises = [];
+            boardTags.forEach(boardTag => {
+                boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+            })
+            Promise.all(boardsPromises).then(boardList => {
+                resolve(boardList);
+            }, function (err) {
+                reject("Mysql error, check your query" + err);
+            });
+        }, function (err) {
+            reject("Mysql error, check your query" + err);
+        });
+    });
+}
 
 exports.getFollowerBoards = function (f_name) {
     return new Promise(function (resolve, reject) {
