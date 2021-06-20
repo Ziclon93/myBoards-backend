@@ -54,7 +54,7 @@ exports.getBoardsOfTag = function(tag) {
         BoardTagModel.findAll({ where: { tagId: tag.id } }).then(boardTags => {
             var boardsPromises = [];
             boardTags.forEach(boardTag => {
-                boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                boardsPromises.push(exports.getBoardById(boardTag.boardId));
             })
             Promise.all(boardsPromises).then(boardList => {
                 resolve(boardList);
