@@ -62,18 +62,23 @@ exports.getMostUsedTags = function () {
 
         TagModel.findAll().then(tagList => {
             var tagListQueries = [];
+            var touples = [];
+            var tagListResult = [];
+            var maxValue = 0;
             tagList.forEach(tag => {
-                tagListQueries.push(BoardTagModel.count({where: {tagId: tag.id}}))
+                tagListQueries.push(BoardTagModel.count({ where: { tagId: tag.id } }))
             })
-            Promise.all(tagListQueries).then(tagListQueriesResult =>{
-                tagListQueriesResult.forEach(result =>{
-                    console.log("____________________________");
-                    console.log(result);
-                    console.log("____________________________");
+            Promise.all(tagListQueries).then(tagListQueriesResult => {
+                tagListQueriesResult.forEach((count, index) => {
+                    touples.push([intex,count])
                 })
-            }
-
-            )
+                touples = sorted(touples, key = lambda(x[1]))
+                touples.forEach((index, count) =>{
+                    print("______________________________");
+                    print("index " + index + " count: " + count);
+                    print("______________________________");
+                })
+            })
         }, function (err) {
             reject("Mysql error, check your query" + err);
         });
