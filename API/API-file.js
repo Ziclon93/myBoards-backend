@@ -329,15 +329,15 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
 router.get('/test', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
 
-        ctl_tag.getMostUsedTags().then(tags =>{
+        ctl_tag.getMostUsedTags().then(tags => {
             var listBoardPromises = []
-            tags.forEach(tag =>{
+            tags.forEach(tag => {
                 listBoardPromises.push(ctl_board.getBoardsOfTag(tag));
             });
-            Promise.all(listBoardPromises).then( boardLists =>{
+            Promise.all(listBoardPromises).then(boardLists => {
 
                 var finalList = []
-                tags.forEach((tag,index) =>{
+                tags.forEach((tag, index) => {
                     finalList.push({
                         tagName: tag.tagName,
                         boardList: boardLists[index],

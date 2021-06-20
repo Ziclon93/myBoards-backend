@@ -70,10 +70,9 @@ exports.getMostUsedTags = function () {
                     touples.push([index, count]);
                 })
                 touples.sort((first, second) => { return second[1] - first[1] });
-                resul
-                if(touples.length >=1){
+                if (touples.length >= 1) {
                     resultList.push(tagList[touples[0][0]])
-                    if(touples.length >=2){
+                    if (touples.length >= 2) {
                         resultList.push(tagList[touples[1][0]])
                     }
                 }
