@@ -340,7 +340,7 @@ router.get('/tags/boards', asyncCheckAPIKey, function (req, res, next) {
                 boardLists.forEach(board => {
                     listBoardDataPromises.push(getBoardData(user, board));
                 });
-                Promise.all(listBoardPromises).then(boardDataLists => {
+                Promise.all(listBoardDataPromises).then(boardDataLists => {
                     var finalList = []
                     tags.forEach((tag, index) => {
                         finalList.push({
