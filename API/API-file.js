@@ -26,15 +26,6 @@ async function asyncCheckAPIKey(req, res, next) {
     }
 }
 
-/* Content-Type : application/x-www-form-urlencoded
- *
- * As x-www-form-urlencoded data we have 3 keys:
- * username
- * email
- * password
- *
- * Return: True (if signed up) False (user already signed up)
- */
 router.post('/signup', function (req, res, next) {
     ctl_user.signUp(req.body['email'], req.body['username'], req.body['password'])
         .then(user => {
@@ -52,14 +43,6 @@ router.post('/signup', function (req, res, next) {
         });;
 });
 
-/* Content-Type : application/x-www-form-urlencoded
- *
- * As x-www-form-urlencoded data we have 2 keys:
- * username
- * password
- *
- * Return: True (if comment created) False (can not create comment)
- */
 router.post('/login', function (req, res, next) {
 
     ctl_user.userController_Login(req.body['username'], req.body['password'])
@@ -77,8 +60,6 @@ router.post('/login', function (req, res, next) {
             res.end("User not valid");
         });
 });
-
-
 
 router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(function (user) {
@@ -112,14 +93,6 @@ router.get('/boards', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
-/* As headers we have:
- * api-key : "Api key provided in the profile"
- * Content-Type : application/x-www-form-urlencoded
- *
- * As x-www-form-urlencoded data we have 2 keys:
- * title
- * text
- */
 router.post('/board', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(function (user) {
         ctl_board.postBoard(

@@ -62,7 +62,7 @@ exports.getMostUsedTags = function () {
                 attributes: [[sequelize.fn('MAX', sequelize.col('tagId')), 'tagId']],
                 group: ['tagId'],
                 raw: true,
-                limit: 5,
+                limit: 2,
             }).then(list => {
                 list.forEach(boardTag => {
                     console.log("____________________________");
