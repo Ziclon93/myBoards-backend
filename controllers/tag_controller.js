@@ -3,6 +3,7 @@ var sequelize = sequelizeConnection.sequelize;
 var tagModel = require('../models/tag');
 var boardTagModel = require('../models/board_tag');
 var DataTypes = require('sequelize/lib/data-types');
+const { where } = require('sequelize/types');
 
 exports.getTag = function (t_name) {
     return new Promise(function (resolve, reject) {
@@ -56,22 +57,28 @@ exports.getBoardTags = function (board) {
 exports.getMostUsedTags = function () {
 
     return new Promise(function (resolve, reject) {
-        
+
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
+        var TagModel = tagModel(sequelize, DataTypes);
 
-        BoardTagModel.findAll({
-            attributes: ['board_tag.tagId', [sequelize.literal('SELECT COUNT(*) FROM board_tags'), 'count']],
-            raw: true,
-            order: [[sequelize.literal('count'), 'DESC']],
-        }).then(list => {
-            console.log("____________________________");
-            console.log(list);
-            console.log("____________________________");
-            resolve(list);
+        TagModel.findAll().then(tagList => {
+            var tagListQueries = [];
+            tagList.forEach(tag => {
+                tagListQueries.add(BoardTagModel.count({where: {tagId: tag.id}}))
+            })
+            Promise.all(tagListQueries).then(tagListQueriesResult =>{
+                tagListQueriesResult.forEach(result =>{
+                    console.log("____________________________");
+                    console.log(result);
+                    console.log("____________________________");
+                })
+            }
 
+            )
         }, function (err) {
             reject("Mysql error, check your query" + err);
         });
+
     });
 }
 
