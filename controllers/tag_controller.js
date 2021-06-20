@@ -89,34 +89,15 @@ exports.getMostUsedTagsBoards = function () {
                         });
                     });
                 } else {
-                    BoardTagModel.findAll({ where: { tagId: tagList[[touples[0][0]]].id } }).then(boardTags1 => {
-                        var boardsLists = [];
-                        var boardsPromises = [];
-                        boardTags1.forEach(boardTag1 => {
-                            console.log("____________________________________");
-                            console.log(boardTag1.boardId);
-                            boardsPromises.push(ctl_board.getBoardById(boardTag1.boardId));
-                        })
-                        Promise.all(boardsPromises).then(boardList => {
-                            boardsLists.push([boardList]);
-                            BoardTagModel.findAll({ where: { tagId: tagList[touples[1][0]].id } }).then(boardTags2 => {
-                                var boardsPromises = [];
-                                boardTags2.forEach(boardTag2 => {
-                                    boardsPromises.push(ctl_board.getBoardById(boardTag2.boardId));
-                                })
-                                Promise.all(boardsPromises).then(boardList => {
-                                    boardsLists.push(boardList);
-                                    resolve(boardsLists);
-                                });
-                            }, function (err) {
-                                reject("Mysql error, check your query" + err);
-                            });
-                        }, function (err) {
-                            reject("Mysql error, check your query" + err);
-                        });
+                    var getTagBoardsPromise = [];
+                    getTagBoardsPromise.push(geBoardsOfTag(touples[0][0].id));
+                    getTagBoardsPromise.push(geBoardsOfTag(touples[1][0].id));
+
+                    Promise.all(getTagBoardsPromise).then(boardListsResult => {
+                        resolve([boardListsResult[0],boardListsResult[1]]);
                     }, function (err) {
                         reject("Mysql error, check your query" + err);
-                    });
+                    });  
                 }
             }, function (err) {
                 reject("Mysql error, check your query" + err);
@@ -143,5 +124,29 @@ exports.postTagOfBoard = function (b_id, tag) {
             console.log("Error ocurred: " + err);
             reject(err);
         });
+    });
+}
+
+function geBoardsOfTag(tag_id) {
+    return new Promise(function (resolve, reject) {
+        var BoardTagModel = boardTagModel(sequelize, DataTypes);
+
+        BoardTagModel.findAll({ where: { tagId: tag_id } }).then(boardTags => {
+            var boardsPromises = [];
+            boardTags.forEach(boardTag => {
+                console.log("____________________________________");
+                console.log(boardTag.boardId);
+                boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+            })
+            Promise.all(boardsPromises).then(boardList => {
+                resolve(boardList);
+            }, function (err) {
+                reject("Mysql error, check your query" + err);
+            });
+        }, function (err) {
+            reject("Mysql error, check your query" + err);
+        });
+
+
     });
 }
