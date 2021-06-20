@@ -3,6 +3,7 @@ var sequelize = sequelizeConnection.sequelize;
 var tagModel = require('../models/tag');
 var boardTagModel = require('../models/board_tag');
 var DataTypes = require('sequelize/lib/data-types');
+const { Sequelize } = require('sequelize/types');
 
 exports.getTag = function (t_name) {
     return new Promise(function (resolve, reject) {
@@ -57,10 +58,13 @@ exports.getMostUsedTags = function () {
 
     return new Promise(function (resolve, reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
-        BoardTagModel.max('tagId').then(list => {
-                    console.log("____________________________");
-                    console.log(list.tagId);
-                    console.log("____________________________");
+        BoardTagModel.max({attributes: [Sequelize.fin('MAX', sequelize.col('tagId'))]}).then(list => {
+            list.forEach(result =>{
+                console.log("____________________________");
+                console.log(result.tagId);
+                console.log("____________________________");
+            })
+                               
             }, function (err) {
                 reject("Mysql error, check your query" + err);
             });
