@@ -327,16 +327,51 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
 
 
 router.get('/test', asyncCheckAPIKey, function (req, res, next) {
-    ctl_tag.getMostUsedTags().then(boardIdList =>{
-        boardIdList.forEach(boardID =>{
-            console.log("____________________________");
-            console.log(boardID);
-            console.log("____________________________");
+    ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
+
+        ctl_tag.getMostUsedTagsBoards().then(boardsLists => {
+            var boardsListsResult = [];
+            if (boardsLists.length == 0) {
+                res.json(boardsListsResult);
+            } else if (boardsLists.length >= 1) {
+                var boardsPromises = [];
+                boardsLists[0].forEach(board => {
+                    boardsPromises.push(getBoardData(user, board));
+                });
+
+                Promise.all(boardsPromises).then(boardDataResults => {
+                    boardsListsResult.push(boardDataResults);
+                    if (boardsLists.length >= 2) {
+                        boardsPromises = [];
+                        boardsLists[0].forEach(board => {
+                            boardsPromises.push(getBoardData(user, board));
+                        });
+
+                        Promise.all(boardsPromises).then(boardDataResults => {
+                            boardsListsResult.push(boardDataResults);
+                            res.json(boardsListsResult);
+                        }, function (err) {
+                            console.log("Get Board rejected", err);
+                            res.status(500).send("Internal server error");
+                        });
+
+                    } else {
+                        res.json(boardsListsResult);
+                    }
+                }, function (err) {
+                    console.log("Get Board rejected", err);
+                    res.status(500).send("Internal server error");
+                });
+            }
+
+        }, function (err) {
+            console.log("Get Most used tags Rejected", err);
+            res.status(500).send("Internal server error");
         });
 
-    },function (err) {
-        console.log("Get Most used tags Rejected", err);
-        res.status(500).send("Internal server error");
+    }, function (err) {
+        console.log("Create post Rejected", err);
+        res.status(500).send("No valid API key");
     });
 });
 
@@ -368,7 +403,7 @@ function getBoardData(user, board) {
             var postLikeCodePromises = [];
             promisesResults[2].forEach(post => {
                 postValorationPromises.push(ctl_valoration.getPostValoration(post));
-                postLikeCodePromises.push(ctl_valoration.getUserLikeCode(user,post))
+                postLikeCodePromises.push(ctl_valoration.getUserLikeCode(user, post))
             })
             Promise.all(postValorationPromises).then(valorations => {
                 Promise.all(postLikeCodePromises).then(likeCodes => {

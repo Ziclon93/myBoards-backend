@@ -2,6 +2,7 @@ var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var tagModel = require('../models/tag');
 var boardTagModel = require('../models/board_tag');
+var ctl_board = require('../controllers/board_controller');
 var DataTypes = require('sequelize/lib/data-types');
 
 exports.getTag = function (t_name) {
@@ -53,7 +54,7 @@ exports.getBoardTags = function (board) {
     });
 };
 
-exports.getMostUsedTags = function () {
+exports.getMostUsedTagsBoards = function () {
 
     return new Promise(function (resolve, reject) {
 
@@ -63,7 +64,6 @@ exports.getMostUsedTags = function () {
         TagModel.findAll().then(tagList => {
             var tagListQueries = [];
             var touples = [];
-            var tagListResult = [];
 
             tagList.forEach(tag => {
                 tagListQueries.push(BoardTagModel.count({ where: { tagId: tag.id } }))
@@ -73,12 +73,51 @@ exports.getMostUsedTags = function () {
                     touples.push([index,count]);
                 })
                 touples.sort((first,second) =>{return  second[1] - first[1]});
-                touples.forEach(touple =>{
-                    console.log("______________________________");
-                    console.log("index " + touple[0] + " count: " + touple[1]);
-                    console.log("______________________________");
-                })
-            })
+                if(touples.length == 0){
+                    resolve([])
+                }else if(touples.length == 1){
+                    BoardTagModel.findAll({where: {tagId: tagList[0]}}).then( boardTags=>{
+                        var boardsPromises = [];
+                        boardTags.forEach(boardTag =>{
+                            boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                        })
+
+                        Promise.all(boardsPromises).then(boardList =>{
+                            resolve([boardList]);
+                        }, function (err) {
+                            reject("Mysql error, check your query" + err);
+                        });
+                    });
+                }else{
+                    BoardTagModel.findAll({where: {tagId: tagList[0]}}).then( boardTags=>{
+                        var boardsLists = [];
+                        var boardsPromises = [];
+                        boardTags.forEach(boardTag =>{
+                            boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                        })
+
+                        Promise.all(boardsPromises).then(boardList =>{
+                            boardsLists.push([boardList]);
+                            BoardTagModel.findAll({where: {tagId: tagList[0]}}).then( boardTags=>{
+                                var boardsPromises = [];
+                                boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                                Promise.all(boardsPromises).then(boardList =>{
+                                    boardsLists.add(boardList);
+                                    resolve(boardsLists);
+                                });
+                            }, function (err) {
+                                reject("Mysql error, check your query" + err);
+                            });
+                        }, function (err) {
+                            reject("Mysql error, check your query" + err);
+                        });
+                    }, function (err) {
+                        reject("Mysql error, check your query" + err);
+                    });
+                }
+            }, function (err) {
+                reject("Mysql error, check your query" + err);
+            });
         }, function (err) {
             reject("Mysql error, check your query" + err);
         });
