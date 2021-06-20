@@ -47,11 +47,11 @@ exports.getBoardById = function (b_id) {
     });
 };
 
-exports.getBoardsOfTag = function(tag_id) {
+exports.getBoardsOfTag = function(tag) {
     return new Promise(function (resolve, reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
 
-        BoardTagModel.findAll({ where: { tagId: tag_id } }).then(boardTags => {
+        BoardTagModel.findAll({ where: { tagId: tag.id } }).then(boardTags => {
             var boardsPromises = [];
             boardTags.forEach(boardTag => {
                 boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));

@@ -2,7 +2,6 @@ var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var tagModel = require('../models/tag');
 var boardTagModel = require('../models/board_tag');
-var ctl_board = require('../controllers/board_controller');
 var DataTypes = require('sequelize/lib/data-types');
 
 exports.getTag = function (t_name) {
@@ -88,6 +87,7 @@ exports.getMostUsedTags() = function () {
     });
 };
 
+/*
 exports.getMostUsedTagsBoards = function () {
 
     return new Promise(function (resolve, reject) {
@@ -133,6 +133,7 @@ exports.getMostUsedTagsBoards = function () {
 
     });
 }
+*/
 
 exports.postTagOfBoard = function (b_id, tag) {
 
@@ -149,29 +150,5 @@ exports.postTagOfBoard = function (b_id, tag) {
             console.log("Error ocurred: " + err);
             reject(err);
         });
-    });
-}
-
-function geBoardsOfTag(tag_id) {
-    return new Promise(function (resolve, reject) {
-        var BoardTagModel = boardTagModel(sequelize, DataTypes);
-
-        BoardTagModel.findAll({ where: { tagId: tag_id } }).then(boardTags => {
-            var boardsPromises = [];
-            boardTags.forEach(boardTag => {
-                console.log("____________________________________");
-                console.log(boardTag.boardId);
-                boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
-            })
-            Promise.all(boardsPromises).then(boardList => {
-                resolve(boardList);
-            }, function (err) {
-                reject("Mysql error, check your query" + err);
-            });
-        }, function (err) {
-            reject("Mysql error, check your query" + err);
-        });
-
-
     });
 }
