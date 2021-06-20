@@ -335,13 +335,10 @@ router.get('/tags/boards', asyncCheckAPIKey, function (req, res, next) {
                 listBoardPromises.push(ctl_board.getBoardsOfTag(tag));
             });
             Promise.all(listBoardPromises).then(boardLists => {
-
                 var listBoardDataPromises = [];
                 boardLists.forEach(boardList => {
                     listBoardDataPromises.push(getListBoardData(user, boardList));
                 });
-
-
                 Promise.all(listBoardDataPromises).then(boardDataLists => {
                     var finalList = []
                     tags.forEach((tag, index) => {
@@ -386,14 +383,14 @@ router.get('/board', asyncCheckAPIKey, function (req, res, next) {
 });
 
 function getListBoardData(user, boardList) {
-    
+
     return new Promise(function (resolve, reject) {
         var listBoardDataPromises = [];
-        boardList.forEach(board =>{
-            listBoardDataPromises.push(getBoardData(user,board));
+        boardList.forEach(board => {
+            listBoardDataPromises.push(getBoardData(user, board));
         })
 
-        Promise.all(listBoardDataPromises).then( listBoardData =>{
+        Promise.all(listBoardDataPromises).then(listBoardData => {
             resolve(listBoardData);
         }, function (err) {
             reject("Get Board rejected" + err);
