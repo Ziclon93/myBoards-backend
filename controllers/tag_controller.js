@@ -57,13 +57,7 @@ exports.getMostUsedTags = function () {
 
     return new Promise(function (resolve, reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
-        BoardTagModel.findAll(
-            {
-                attributes: [[sequelize.fn('MAX', sequelize.col('tagId')), 'tagId']],
-                group: ['tagId'],
-                raw: true,
-                limit: 2,
-            }).then(list => {
+        BoardTagModel.max('tagId').then(list => {
                 list.forEach(boardTag => {
                     console.log("____________________________");
                     console.log(boardTag.tagId);
