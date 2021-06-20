@@ -63,11 +63,9 @@ exports.getMostUsedTags = function () {
             raw: true,
             order: sequelize.literal('count DESC'),
         }).then(list => {
-            list.forEach(result => {
                 console.log("____________________________");
-                console.log(result);
+                console.log(list);
                 console.log("____________________________");
-            });
             resolve(list);
 
         }, function (err) {
