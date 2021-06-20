@@ -72,7 +72,7 @@ exports.getMostUsedTags = function () {
                 tagListQueriesResult.forEach((count, index) => {
                     touples.push([index,count]);
                 })
-                touples.sort((first,second) =>{return first[1] - second[1]});
+                touples.sort((first,second) =>{return  second[1] > first[1]});
                 touples.forEach((index, count) =>{
                     console.log("______________________________");
                     console.log("index " + index + " count: " + count);
