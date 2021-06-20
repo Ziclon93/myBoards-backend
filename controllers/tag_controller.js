@@ -75,23 +75,14 @@ exports.getMostUsedTagsBoards = function () {
                 touples.sort((first, second) => { return second[1] - first[1] });
                 if (touples.length == 0) {
                     resolve([])
-                } else if (touples.length == 1) {
-                    BoardTagModel.findAll({ where: { tagId: tagList[touples[0][0]].id } }).then(boardTags => {
-                        var boardsPromises = [];
-                        boardTags.forEach(boardTag => {
-                            boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
-                        })
-
-                        Promise.all(boardsPromises).then(boardList => {
-                            resolve([boardList]);
-                        }, function (err) {
-                            reject("Mysql error, check your query" + err);
-                        });
-                    });
                 } else {
                     var getTagBoardsPromise = [];
+                    console.log("_________________"+ touples[0][0].id+"___________________");
                     getTagBoardsPromise.push(geBoardsOfTag(touples[0][0].id));
-                    getTagBoardsPromise.push(geBoardsOfTag(touples[1][0].id));
+                    if (touples.length >= 2){
+                        console.log("_________________"+ touples[1][0].id+"___________________");
+                        getTagBoardsPromise.push(geBoardsOfTag(touples[1][0].id));
+                    }
 
                     Promise.all(getTagBoardsPromise).then(boardListsResult => {
                         resolve([boardListsResult[0],boardListsResult[1]]);
