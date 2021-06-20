@@ -63,7 +63,7 @@ exports.getMostUsedTags = function () {
                 console.log("____________________________");
                 console.log(result.tagId);
                 console.log("____________________________");
-            })
+            });
                                
             }, function (err) {
                 reject("Mysql error, check your query" + err);
