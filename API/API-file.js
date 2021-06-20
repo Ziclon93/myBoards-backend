@@ -325,21 +325,6 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
-
-router.get('/test', asyncCheckAPIKey, function (req, res, next) {
-    ctl_tag.getMostUsedTags().then(boardIdList =>{
-        boardIdList.forEach(boardID =>{
-            console.log("____________________________");
-            console.log(boardID);
-            console.log("____________________________");
-        });
-
-    },function (err) {
-        console.log("Get Most used tags Rejected", err);
-        res.status(500).send("Internal server error");
-    });
-});
-
 router.get('/board', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_board.getBoardById(req.query['boardId']).then(board => {
