@@ -63,7 +63,7 @@ exports.getMostUsedTags = function () {
         TagModel.findAll().then(tagList => {
             var tagListQueries = [];
             tagList.forEach(tag => {
-                tagListQueries.add(BoardTagModel.count({where: {tagId: tag.id}}))
+                tagListQueries.push(BoardTagModel.count({where: {tagId: tag.id}}))
             })
             Promise.all(tagListQueries).then(tagListQueriesResult =>{
                 tagListQueriesResult.forEach(result =>{
