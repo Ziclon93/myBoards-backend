@@ -89,13 +89,13 @@ exports.getMostUsedTagsBoards = function () {
                         });
                     });
                 }else{
+                    console.log(tagList);
                     BoardTagModel.findAll({where: {tagId: tagList[0]}}).then( boardTags1=>{
                         var boardsLists = [];
                         var boardsPromises = [];
                         boardTags1.forEach(boardTag1 =>{
                             boardsPromises.push(ctl_board.getBoardById(boardTag1.boardId));
                         })
-
                         Promise.all(boardsPromises).then(boardList =>{
                             boardsLists.push([boardList]);
                             BoardTagModel.findAll({where: {tagId: tagList[1]}}).then( boardTags2=>{
