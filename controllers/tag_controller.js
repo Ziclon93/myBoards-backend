@@ -3,7 +3,6 @@ var sequelize = sequelizeConnection.sequelize;
 var tagModel = require('../models/tag');
 var boardTagModel = require('../models/board_tag');
 var DataTypes = require('sequelize/lib/data-types');
-const { where } = require('sequelize/types');
 
 exports.getTag = function (t_name) {
     return new Promise(function (resolve, reject) {
