@@ -52,7 +52,7 @@ exports.getBoardTags = function (board) {
 
     });
 };
-exports.getMostUsedTags() = function () {
+exports.getMostUsedTags = function () {
     return new Promise(function (resolve, reject) {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         var TagModel = tagModel(sequelize, DataTypes);
