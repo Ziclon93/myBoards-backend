@@ -92,16 +92,16 @@ exports.getMostUsedTagsBoards = function () {
                     BoardTagModel.findAll({where: {tagId: tagList[0]}}).then( boardTags=>{
                         var boardsLists = [];
                         var boardsPromises = [];
-                        boardTags.forEach(boardTag =>{
-                            boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                        boardTags.forEach(boardTag1 =>{
+                            boardsPromises.push(ctl_board.getBoardById(boardTag1.boardId));
                         })
 
                         Promise.all(boardsPromises).then(boardList =>{
                             boardsLists.push([boardList]);
                             BoardTagModel.findAll({where: {tagId: tagList[0]}}).then( boardTags=>{
                                 var boardsPromises = [];
-                                boardTags.forEach(boardTag =>{
-                                    boardsPromises.push(ctl_board.getBoardById(boardTag.boardId));
+                                boardTags.forEach(boardTag2 =>{
+                                    boardsPromises.push(ctl_board.getBoardById(boardTag2.boardId));
                                 })
                                 Promise.all(boardsPromises).then(boardList =>{
                                     boardsLists.push(boardList);
