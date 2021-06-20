@@ -352,6 +352,11 @@ router.get('/profile', asyncCheckAPIKey, function (req, res, next) {
     });
 });
 
+
+router.get('/test', asyncCheckAPIKey, function (req, res, next) {
+    ctl_tag.getMostUsedTags();
+});
+
 router.get('/board', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key']).then(user => {
         ctl_board.getBoardById(req.query['boardId']).then(board => {
