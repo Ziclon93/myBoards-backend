@@ -336,16 +336,23 @@ router.get('/tags/boards', asyncCheckAPIKey, function (req, res, next) {
             });
             Promise.all(listBoardPromises).then(boardLists => {
 
-                var finalList = []
-                tags.forEach((tag, index) => {
-                    finalList.push({
-                        tagName: tag.tagName,
-                        boardList: boardLists[index],
-                    });
+                var listBoardDataPromises = []
+                boardLists.forEach(board => {
+                    listBoardDataPromises.push(getBoardData(user, board));
                 });
-                res.json(finalList);
-
-
+                Promise.all(listBoardPromises).then(boardDataLists => {
+                    var finalList = []
+                    tags.forEach((tag, index) => {
+                        finalList.push({
+                            tagName: tag.tagName,
+                            boardList: boardDataLists[index],
+                        });
+                    });
+                    res.json(finalList);
+                }, function (err) {
+                    console.log("Get Board rejected", err);
+                    res.status(500).send("Internal server error");
+                });
             }, function (err) {
                 console.log("Get Board rejected", err);
                 res.status(500).send("Internal server error");
