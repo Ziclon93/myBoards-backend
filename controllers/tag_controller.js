@@ -59,14 +59,16 @@ exports.getMostUsedTags = function () {
         var BoardTagModel = boardTagModel(sequelize, DataTypes);
         BoardTagModel.findAll({
             attributes: ['tagId',[sequelize.fn('count', sequelize.col('tagId')), 'count']],
+            group: ['board_tag.boardId']
             raw: true,
             order: sequelize.literal('count DESC'),
         }).then(list => {
             list.forEach(result => {
                 console.log("____________________________");
-                console.log(result.tagId);
+                console.log(result);
                 console.log("____________________________");
             });
+            resolve(list);
 
         }, function (err) {
             reject("Mysql error, check your query" + err);
